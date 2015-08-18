@@ -10,14 +10,15 @@
     <description>Generic NHibernate Repository</description>
     <copyright>Copyright Jon Hawkins 2015</copyright>
     <projectUrl>https://github.com/twistedtwig/NHibernateRepository</projectUrl>
+
+    <dependecies>
+		<dependency id="AutoMapper" />
+		<dependency id="FluentNHibernate" />
+	</dependecies>
+
   </metadata>
  <files>
     <file src="ConfigurationSetup\bin\Release\ConfigurationSetup.dll" target="lib\net45" />
     <file src="ConfigurationSetup\bin\Release\ConfigurationSetup.pdb" target="lib\net45"  />           
-  </files>
-
-  <dependecies>
-    <dependency id="AutoMapper" />
-    <dependency id="FluentNHibernate" />
-  </dependecies>
+  </files> 
 </package>
