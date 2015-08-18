@@ -18,7 +18,7 @@
 
   </metadata>
  <files>
-    <file src="NHibernateRepoProject\bin\Release\NHibernateRepoProject.dll" target="lib\net45" />
-    <file src="NHibernateRepoProject\bin\Release\NHibernateRepoProject.pdb" target="lib\net45"  />           
+    <file src="NHibernateRepo\bin\Release\NHibernateRepo.dll" target="lib\net45" />
+    <file src="NHibernateRepo\bin\Release\NHibernateRepo.pdb" target="lib\net45"  />           
   </files> 
 </package>
