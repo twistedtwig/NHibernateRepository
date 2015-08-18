@@ -11,10 +11,10 @@
     <copyright>Copyright Jon Hawkins 2015</copyright>
     <projectUrl>https://github.com/twistedtwig/NHibernateRepository</projectUrl>
 
-    <dependecies>
+    <dependencies>
 		<dependency id="AutoMapper" />
 		<dependency id="FluentNHibernate" />
-	</dependecies>
+	</dependencies>
 
   </metadata>
  <files>
