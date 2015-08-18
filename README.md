@@ -26,7 +26,7 @@ Here is an simple example of how to setup a RepositoryObject
 
 ```c#
 
-public class RepositoryObject<StudentEntity, StudentEntityOverride> : Repo<StudentEntity, StudentEntityOverride>()
+public class RepositoryObject : Repo<StudentEntity, StudentEntityOverride>()
 {
 
 	RepositoryObject() : base("DbConnectionStringName") { }
@@ -36,7 +36,7 @@ public class RepositoryObject<StudentEntity, StudentEntityOverride> : Repo<Stude
 
 ...
 
-var repo = new RepositoryObject<StudentEntity, StudentEntityOverride>();
+var repo = new RepositoryObject();
 var list = repo.List<StudentEntity, StudentSummary>(x => x.Age > 18);
 
 using (var transcation = repo.BeginTransaction())
