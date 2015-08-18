@@ -7,7 +7,7 @@ using NHibernate.Linq;
 
 namespace NHibernateRepo
 {
-    public class Repo<TEntity, TOverride>
+    public abstract class Repo<TEntity, TOverride>
         : IRepo<TEntity, TOverride> 
         where TEntity : class
         where TOverride : class
@@ -31,8 +31,7 @@ namespace NHibernateRepo
         }
 
 
-
-        public Repo(string connectionStringOrName)
+        protected Repo(string connectionStringOrName)
         {
             _connectionStringOrName = connectionStringOrName;
             var repoSetup = new RepoSetup<TEntity, TOverride>(_connectionStringOrName);
@@ -99,6 +98,11 @@ namespace NHibernateRepo
         public TP FirstOrDefault<TE, TP>(Expression<Func<TE, bool>> exp)
         {
             return Session.Query<TE>().Where(exp).ProjectTo<TP>().FirstOrDefault();
+        }
+
+        public bool Any<TE>(Expression<Func<TE, bool>> exp)
+        {
+            return Session.Query<TE>().Any(exp);
         }
 
 

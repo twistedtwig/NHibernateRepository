@@ -19,6 +19,7 @@ namespace NHibernateRepo
         TP SingleOrDefault<TE, TP>(Expression<Func<TE, bool>> exp);
         TP First<TE, TP>(Expression<Func<TE, bool>> exp);
         TP FirstOrDefault<TE, TP>(Expression<Func<TE, bool>> exp);
+        bool Any<TE>(Expression<Func<TE, bool>> exp);
     }
 
     public interface IRepoTransaction<TEntity, TOverride> : IDisposable
