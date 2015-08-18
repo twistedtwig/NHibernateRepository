@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>$version$</version>
+    <authors>Jon Hawkins</authors>
+    <owners>Jon Hawkins</owners>
+    <id>NHibernateRepo</id>
+    <title>HoH - NHibernate Repository</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Generic NHibernate Repository</description>
+    <copyright>Copyright Jon Hawkins 2015</copyright>
+    <projectUrl>https://github.com/twistedtwig/NHibernateRepository</projectUrl>
+  </metadata>
+ <files>
+    <file src="ConfigurationSetup\bin\Release\ConfigurationSetup.dll" target="lib\net45" />
+    <file src="ConfigurationSetup\bin\Release\ConfigurationSetup.pdb" target="lib\net45"  />           
+  </files>
+
+  <dependecies>
+    <dependency id="AutoMapper" />
+    <dependency id="FluentNHibernate" />
+  </dependecies>
+</package>

@@ -1,7 +1,5 @@
 
 
-setup git hub
-
 setup teamcity
 
 setup nuget package
