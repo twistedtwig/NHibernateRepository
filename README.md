@@ -6,7 +6,7 @@ The goal of this project is to provide a clean repository layer that tries to re
 The Repo object is an abstract class.  A suggestion is to create a Repository project, inherit from the Repo class, passing the connection string name (or actual connection string) to the abstract base class.  The Entity models can be either in this project or another, As well as database overrides.
 
 ```
-Repository Project:
+Repository Models Project:
 [
 	Models:
 	[
@@ -17,11 +17,12 @@ Repository Project:
 	[
 		StudentEntityOverride
 		ClassEntityOverride
-	]
-	RepositoryObject
-]
-```
+	]	
 
+    RepositoryObject
+]
+
+```
 Here is an simple example of how to setup a RepositoryObject
 
 ```c#
@@ -49,6 +50,8 @@ using (var transcation = repo.BeginTransaction())
 }
 ```
 
+When updating a the database this can be achieved it two ways.  Automatic updates so the shcema is brought into line with the schema as is by the code.  This doesn't allow for stored procedures or data changes.
+The second approach is to migrations.  Every time a schema or data change is required create a migration within the repository project.
 
 TODO:
 

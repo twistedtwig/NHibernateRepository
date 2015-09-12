@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHibernateRepo", "NHibernateRepo\NHibernateRepo.csproj", "{EFBB0A67-EE0B-4160-9806-3E8D2AB9F2A1}"
 EndProject
@@ -10,6 +10,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		todo.txt = todo.txt
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseManagement", "DatabaseManagement\DatabaseManagement.csproj", "{B66B4B04-FC48-4869-B128-875CB7BF992D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{3F84A47C-334C-49F9-BFCF-1FF2AC2AF7C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleRepo", "Test\ExampleRepo\ExampleRepo.csproj", "{299F7927-CCA1-46D6-AA96-8F1629CE116F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsoleWorker", "Test\TestConsoleWorker\TestConsoleWorker.csproj", "{7E16A75B-8D3C-40C4-9FDE-ED4BF4DE1707}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHibernateMigrationRepo", "NHibernateMigrationRepo\NHibernateMigrationRepo.csproj", "{FC187782-1E2C-44FC-BC57-A1DB5E7871B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHMigrate", "NHMigrate\NHMigrate.csproj", "{4B4671FA-9B92-478B-8ABE-CAC4AC1BFEE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +33,32 @@ Global
 		{EFBB0A67-EE0B-4160-9806-3E8D2AB9F2A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFBB0A67-EE0B-4160-9806-3E8D2AB9F2A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFBB0A67-EE0B-4160-9806-3E8D2AB9F2A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B66B4B04-FC48-4869-B128-875CB7BF992D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B66B4B04-FC48-4869-B128-875CB7BF992D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B66B4B04-FC48-4869-B128-875CB7BF992D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B66B4B04-FC48-4869-B128-875CB7BF992D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{299F7927-CCA1-46D6-AA96-8F1629CE116F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{299F7927-CCA1-46D6-AA96-8F1629CE116F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{299F7927-CCA1-46D6-AA96-8F1629CE116F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{299F7927-CCA1-46D6-AA96-8F1629CE116F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E16A75B-8D3C-40C4-9FDE-ED4BF4DE1707}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E16A75B-8D3C-40C4-9FDE-ED4BF4DE1707}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E16A75B-8D3C-40C4-9FDE-ED4BF4DE1707}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E16A75B-8D3C-40C4-9FDE-ED4BF4DE1707}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC187782-1E2C-44FC-BC57-A1DB5E7871B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC187782-1E2C-44FC-BC57-A1DB5E7871B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC187782-1E2C-44FC-BC57-A1DB5E7871B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC187782-1E2C-44FC-BC57-A1DB5E7871B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B4671FA-9B92-478B-8ABE-CAC4AC1BFEE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B4671FA-9B92-478B-8ABE-CAC4AC1BFEE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B4671FA-9B92-478B-8ABE-CAC4AC1BFEE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B4671FA-9B92-478B-8ABE-CAC4AC1BFEE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{299F7927-CCA1-46D6-AA96-8F1629CE116F} = {3F84A47C-334C-49F9-BFCF-1FF2AC2AF7C3}
+		{7E16A75B-8D3C-40C4-9FDE-ED4BF4DE1707} = {3F84A47C-334C-49F9-BFCF-1FF2AC2AF7C3}
 	EndGlobalSection
 EndGlobal
