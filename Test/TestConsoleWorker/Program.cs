@@ -17,6 +17,7 @@ namespace TestConsoleWorker
 
         private void Run()
         {
+
             var setup = new SchemaSetup();
                                                                     
 //            setup.EnableMigrations(new EnableMigrationsCriteria
@@ -27,16 +28,22 @@ namespace TestConsoleWorker
 
 
 
-
-
-
             var criteria = new CreationCriteria
             {
                 ProjectFileLocation = @"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj",
-                FileName = "Age_added",
-                RepoName = "ExampleRepo"
+                FileName = "initial_Setup-Models",
+                RepoName = "examplerepo"
             };
             setup.CreateScript(criteria);
+
+
+//            var criteria = new CreationCriteria
+//            {
+//                ProjectFileLocation = @"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj",
+//                FileName = "Age_added",
+//                RepoName = "ExampleRepo"
+//            };
+//            setup.CreateScript(criteria);
 
 
 

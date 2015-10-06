@@ -1,4 +1,5 @@
 ﻿using DatabaseManagement.Migrations;
+using DatabaseManagement.ProjectHelpers;
 using NHibernateRepo.Configuration;
 using NHibernateRepo.Migrations;
 using NHibernateRepo.Repos;
@@ -7,9 +8,18 @@ using System.Linq;
 
 namespace DatabaseManagement
 {
+    /// <summary>
+    /// Is a helper class to find Types from given assemblies or project files.
+    /// </summary>
     internal static class TypeHandler
     {        
-        
+        /// <summary>
+        /// Creates a instance of the base repo class from the given type.
+        /// </summary>
+        /// <param name="projectDllPath"></param>
+        /// <param name="typeofRepo"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
         internal static BaseRepo CreateRepoBase(string projectDllPath, Type typeofRepo, params object[] args)
         {
             AssemblyLoadingHelper.Reset();
@@ -35,9 +45,16 @@ namespace DatabaseManagement
             return repo;
         }
 
+        /// <summary>
+        /// Tries to find the implementation of the base repo object from the given project.  
+        /// Will return NULL if more than one is found.  The name can be passed in if the repo name is known, (required if multiple repos in same project).
+        /// </summary>
+        /// <param name="projectPath"></param>
+        /// <param name="optionalRepoName"></param>
+        /// <returns></returns>
         internal static RepoSearchResult FindSingleRepo(string projectPath, string optionalRepoName)
         {
-            var loadedProject = new ProjectFileHandler().LoadProject(projectPath);
+            var loadedProject = new ProjectEvalutionHelper().LoadEvalutionProject(projectPath);
 
             var repoTypes = loadedProject
                 .GetTypes()
@@ -80,6 +97,15 @@ namespace DatabaseManagement
             return new RepoSearchResult(loadedProject, repoTypes.Single());
         }
 
+        /// <summary>
+        /// Tries to find the migration configuration file. 
+        /// Will find the repo for the project and then look for the configuration for that repo.
+        /// Creates instance of the base none generic version
+        /// Will return NULL if none found
+        /// </summary>
+        /// <param name="projectPath"></param>
+        /// <param name="optionalRepoName"></param>
+        /// <returns></returns>
         internal static RepoMigrationConfigurationBaseNoneGeneric FindConfiguration(string projectPath, string optionalRepoName)
         {
             var repoInfo = FindSingleRepo(projectPath, optionalRepoName);
@@ -88,6 +114,15 @@ namespace DatabaseManagement
             return FindConfiguration(projectPath, repoInfo.RepoType);
         }
 
+        /// <summary>
+        /// Tries to find the migration configuration file for the type given.
+        /// Will find the repo for the project and then look for the configuration for that repo.
+        /// Creates instance of the base none generic version
+        /// Will return NULL if none found
+        /// </summary>
+        /// <param name="projectPath"></param>
+        /// <param name="repoType"></param>
+        /// <returns></returns>
         internal static RepoMigrationConfigurationBaseNoneGeneric FindConfiguration(string projectPath, Type repoType)
         {
             bool multipleFound;
@@ -98,11 +133,19 @@ namespace DatabaseManagement
             return Activator.CreateInstance(configType) as RepoMigrationConfigurationBaseNoneGeneric;
         }
 
+        /// <summary>
+        /// Tries to find configuration Type.
+        /// If none or multiple found NULL will be returned.
+        /// </summary>
+        /// <param name="projectPath"></param>
+        /// <param name="repoType"></param>
+        /// <param name="multipleFound"></param>
+        /// <returns></returns>
         internal static Type FindSingleConfiguration(string projectPath, Type repoType, out bool multipleFound)
         {
             multipleFound = false;
 
-            var loadedProject = new ProjectFileHandler().LoadProject(projectPath);
+            var loadedProject = new ProjectEvalutionHelper().LoadEvalutionProject(projectPath);
 
             var baseType = typeof (RepoMigrationConfigurationBase<>).MakeGenericType(repoType);
             var configTypes = loadedProject
@@ -125,9 +168,15 @@ namespace DatabaseManagement
             return null;
         }
 
+        /// <summary>
+        /// Finds all migration Types / Classes from the given project.
+        /// </summary>
+        /// <param name="projectPath"></param>
+        /// <param name="repoType"></param>
+        /// <returns></returns>
         internal static Type[] FindAllMigrations(string projectPath, Type repoType)
         {
-            var loadedProject = new ProjectFileHandler().LoadProject(projectPath);
+            var loadedProject = new ProjectEvalutionHelper().LoadEvalutionProject(projectPath);
 
             var baseType = typeof(BaseMigration<>).MakeGenericType(repoType);
             return loadedProject

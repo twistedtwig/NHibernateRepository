@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using DatabaseManagement.Models;
+using DatabaseManagement.ProjectHelpers;
 using NHibernate.Tool.hbm2ddl;
 
 namespace DatabaseManagement.Migrations
@@ -25,7 +26,7 @@ namespace DatabaseManagement.Migrations
 
         public string CreateFile(CreationCriteria criteria)
         {
-            var projectNamespace = new ProjectFileHandler().RootNameSpace(criteria.ProjectFileLocation);
+            var projectNamespace = new ProjectEvalutionHelper().RootNameSpace(criteria.ProjectFileLocation);
             var migrationFileInfo = GenerateFileLocation(criteria);
 
             if (!Directory.Exists(migrationFileInfo.Folder))
@@ -109,6 +110,11 @@ namespace DatabaseManagement.Migrations
 
             string folder = Path.Combine(criteria.ProjectFileLocation.Substring(0, criteria.ProjectFileLocation.LastIndexOf("\\")), criteria.MigrationPath);
 
+            criteria.FileName = criteria.FileName.Replace("-", "_");
+
+            var rgx = new Regex("[^a-zA-Z0-9_]");
+            string safeName = rgx.Replace(criteria.FileName, "_");
+
             string pattern = @"\\\d+_" + criteria.FileName + @"(\(\d+\)){0,1}.cs";
             var reg = new Regex(pattern);
 
@@ -133,12 +139,12 @@ namespace DatabaseManagement.Migrations
             if (files.Count == 0)
             {
                 result.Name = dateStamp + "_" + criteria.FileName;
-                result.ClassName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(string.Format("{0}_{1}_{2}",fileNamePre, dateStamp, criteria.FileName));
+                result.ClassName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(string.Format("{0}_{1}_{2}",fileNamePre, dateStamp, safeName));
             }
             else
             {
                 result.Name = string.Format("{0}_{1}({2})", dateStamp, criteria.FileName, files.Count);
-                result.ClassName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(string.Format("{0}_{1}_{2}{3}", fileNamePre, dateStamp, criteria.FileName, files.Count));
+                result.ClassName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(string.Format("{0}_{1}_{2}{3}", fileNamePre, dateStamp, safeName, files.Count));
             }
 
             result.FullFilePath = Path.Combine(folder, result.Name + result.Extension);

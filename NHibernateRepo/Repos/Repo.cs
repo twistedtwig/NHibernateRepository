@@ -20,7 +20,7 @@ namespace NHibernateRepo.Repos
             get
             {
                 if (_session == null || !_session.IsOpen)
-                {
+                {                   
                     _session = SessionFactory.OpenSession();
                 }
 
@@ -42,7 +42,7 @@ namespace NHibernateRepo.Repos
         where TEntity : class
         where TOverride : class
     {
-        
+
         protected RepoSplit(string connectionStringOrName)
         {
             if (string.IsNullOrWhiteSpace(connectionStringOrName))
@@ -51,8 +51,8 @@ namespace NHibernateRepo.Repos
             }
 
             ConnectionStringOrName = connectionStringOrName;
-            var repoSetup = CreateRepoSetup();
-            SessionFactory = repoSetup.SessionFactory;
+            var repoSetup = CreateRepoSetup(ConnectionStringOrName);
+//            SessionFactory = repoSetup.SessionFactory;
         }
 
         public RepoTransaction<TEntity, TOverride> BeginTransaction()
@@ -129,9 +129,9 @@ namespace NHibernateRepo.Repos
 
         #region Migration Methods
 
-        internal RepoSetup<TEntity, TOverride> CreateRepoSetup()
+        internal RepoSetup<TEntity, TOverride> CreateRepoSetup(string conString)
         {
-            return new RepoSetup<TEntity, TOverride>(ConnectionStringOrName);
+            return new RepoSetup<TEntity, TOverride>(conString);
         }
 
 

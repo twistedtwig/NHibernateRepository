@@ -7,18 +7,28 @@ using System.Reflection;
 
 namespace DatabaseManagement
 {
+    /// <summary>
+    /// Manages Project assemblies.
+    /// </summary>
     internal class AssemblyLoadingHelper
     {
         private static Dictionary<string, Assembly> _libs = new Dictionary<string, Assembly>();
         private static List<string> _hintPaths = new List<string>();
 
-
+        /// <summary>
+        /// Clears cache, (store of assmeblies and hint paths).
+        /// </summary>
         internal static void Reset()
         {
             _libs = new Dictionary<string, Assembly>();
             _hintPaths = new List<string>();
         }
 
+        /// <summary>
+        /// Hint paths can be added to help find assembly dependencies.  Path can be a folder or DLL.
+        /// If its a folder it will find all DLL's in that folder.
+        /// </summary>
+        /// <param name="path"></param>
         internal static void AddHintPath(string path)
         {
             if (!string.IsNullOrWhiteSpace(path) && !_hintPaths.Contains(path))
@@ -41,6 +51,12 @@ namespace DatabaseManagement
             }
         }
 
+        /// <summary>
+        /// Event handler method to resolve DLL assemblies that can't be found automatically.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
         internal static Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
         {
             Assembly assembly;

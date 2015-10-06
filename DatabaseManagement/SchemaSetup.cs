@@ -1,6 +1,8 @@
 ﻿using DatabaseManagement.Configuration;
+using DatabaseManagement.EnvDte;
 using DatabaseManagement.Migrations;
 using DatabaseManagement.Models;
+using DatabaseManagement.ProjectHelpers;
 using FluentNHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using NHibernateMigrationRepo;
@@ -48,7 +50,7 @@ namespace DatabaseManagement
 
 
             //clean up
-            new ProjectFileHandler().FinishedWithProject(criteria.ProjectFilePath);
+            ProjectEvalutionHelper.FinishedWithProject(criteria.ProjectFilePath);
         }
 
 
@@ -56,7 +58,9 @@ namespace DatabaseManagement
         /// Enables the ability for that project to be able to use NHibernate Repo migrations, automatic or manual.
         /// </summary>
         public void EnableMigrations(EnableMigrationsCriteria criteria)
-        {            
+        {
+            MessageFilter.Register();
+            
             var repoInfo = TypeHandler.FindSingleRepo(criteria.ProjectPath, criteria.RepoName);
             //if it is null something is wrong so drop out.
             if (repoInfo == null) return;
@@ -71,7 +75,7 @@ namespace DatabaseManagement
             {
                 Console.WriteLine("Adding migration configuration");
                 var filePath = new ConfigurationFileHandler().CreateConfigurationFile(criteria.ProjectPath, repoInfo.RepoType.Name, "Migrations", MigrationToUse.Manual);
-                new ProjectFileHandler().AddFile(criteria.ProjectPath, "Migrations", filePath);                
+                new ProjectDteHelper().AddFile(criteria.ProjectPath, "Migrations", filePath, showFile: true);                
             }
             else
             {
@@ -85,7 +89,8 @@ namespace DatabaseManagement
             updater.Execute(false, true);
 
             //clean up
-            new ProjectFileHandler().FinishedWithProject(criteria.ProjectPath);
+            ProjectEvalutionHelper.FinishedWithProject(criteria.ProjectPath);
+            MessageFilter.Revoke();
         }
 
 
@@ -121,7 +126,7 @@ namespace DatabaseManagement
             updater.Execute(false, true);
 
             //clean up
-            new ProjectFileHandler().FinishedWithProject(criteria.ProjectFilePath);
+            ProjectEvalutionHelper.FinishedWithProject(criteria.ProjectFilePath);
         }
 
         /// <summary>
@@ -146,6 +151,8 @@ namespace DatabaseManagement
             var repoInfo = TypeHandler.FindSingleRepo(criteria.ProjectFileLocation, criteria.RepoName);
             //if null we need to drop out.
             if(repoInfo == null) return;
+            //ensure that we have the case correct.
+            criteria.RepoName = repoInfo.RepoType.Name;
 
             var configuration = TypeHandler.FindConfiguration(criteria.ProjectFileLocation, repoInfo.RepoType);
             //if null something bad happend, drop out
@@ -154,17 +161,17 @@ namespace DatabaseManagement
             var updater = CreateSchemaUpdater(repoInfo.Assembly.Location, repoInfo.RepoType);    
        
             var fileMigrationHandler = new MigrationFileHandler(updater);
-            var projectFileHandler = new ProjectFileHandler();
+            var projectFileHandler = new ProjectDteHelper();
 
             //set the mgiration folder form config:
             criteria.MigrationPath = configuration.RootMigrationFolder;
 
             var filePath = fileMigrationHandler.CreateFile(criteria);           
-            projectFileHandler.AddFile(criteria.ProjectFileLocation, configuration.RootMigrationFolder, filePath);
+            projectFileHandler.AddFile(criteria.ProjectFileLocation, configuration.RootMigrationFolder, filePath, showFile: true);
 
 
             //clean up
-            projectFileHandler.FinishedWithProject(criteria.ProjectFileLocation);
+            ProjectEvalutionHelper.FinishedWithProject(criteria.ProjectFileLocation);
         }
 
 
@@ -191,7 +198,7 @@ namespace DatabaseManagement
             runner.ApplyMigrations(criteria);
 
             //clean up
-            new ProjectFileHandler().FinishedWithProject(criteria.ProjectPath);
+            ProjectEvalutionHelper.FinishedWithProject(criteria.ProjectPath);
         }
 
 
@@ -223,8 +230,8 @@ namespace DatabaseManagement
         {
             var repoBase = TypeHandler.CreateRepoBase(projectdllPath, repoType, args);
             MethodInfo createRepoSetupMethod = repoType.GetMethod("CreateRepoSetup", BindingFlags.Instance | BindingFlags.NonPublic);
-            var repoSetup = createRepoSetupMethod.Invoke(repoBase, null);
-
+            var repoSetup = createRepoSetupMethod.Invoke(repoBase, new object[] { "Data Source=localhost;database=jontest;Integrated Security=true;" }); //new object[] { "connectionString" }
+            
             var createConfigMethod = repoSetup.GetType().GetMethod("CreateConfiguration", BindingFlags.Instance | BindingFlags.NonPublic);
             var config = createConfigMethod.Invoke(repoSetup, null) as FluentConfiguration;
 

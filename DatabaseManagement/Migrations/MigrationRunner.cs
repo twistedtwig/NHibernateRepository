@@ -19,6 +19,7 @@ namespace DatabaseManagement.Migrations
             }
 
             var repoBase = TypeHandler.CreateRepoBase(repoInfo.Assembly.Location, repoInfo.RepoType);
+            ConnectionStringHandler.SubsituateConnectionString(repoBase, criteria.ConfigFilePath);
 
             var migrationTypes = TypeHandler.FindAllMigrations(criteria.ProjectPath, repoInfo.RepoType);
 

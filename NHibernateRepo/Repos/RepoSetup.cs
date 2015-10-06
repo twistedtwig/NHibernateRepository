@@ -76,8 +76,7 @@ namespace NHibernateRepo.Repos
                 .UseOverridesFromAssemblyOf<TOverride>()
                 .Conventions.Add(DefaultLazy.Never())
                 .Conventions.Add(DefaultCascade.SaveUpdate());
-
-
+            
             return mappingSetup;
         }
 

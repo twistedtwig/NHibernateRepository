@@ -1,6 +1,28 @@
 
+BUG: need to remove connection string dependency from running app.
 
-make nhmigrate embed all the DLL's it uses
+BUG: when running it on a project that doesn't have a repo it throws unable to load project error.. not the most helpful.
+
+BUG: need to get config file path or something.  need to change when sessions factory is created, (out of constructor), inject real connection string if name matches one of the conn strings from config file.
+
+
+
+
+ensure exe works
+
+-----------------
+EXE runner examples:
+
+enable-migrations E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj -repo examplerepo
+Add-Migration E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj init_mig -repo examplerepo
+
+-----------------
+
+
+have issue that connection string is not being found... need to pass in the startup project and some how inject the connection string
+
+
+make nhmigrate embed all the DLL's it uses => http://stackoverflow.com/questions/189549/embedding-dlls-in-a-compiled-executable
 
 clean up and write explaination of test area, example project.
 
@@ -10,6 +32,15 @@ update readme to include auto mapper settings info
 
 update readme to explain that the project you point at for the model TEntity will find all classes and try and map them to the db, will only exlude some class types.
 
+
+commit
+
+
+create powershell script to call exe with params
+
+commit
+
+figure out how to get powershell to be first class citizen of PMC
 
 
 
@@ -31,7 +62,7 @@ figure out when powershell script is run how it knows which project to look in f
 be able to tell the schema creator which project to look in for Irepo implementation
 run all instances of IRepo
 
-
+when adding a migration should check that all previous migrations have already been run.
 
 
 

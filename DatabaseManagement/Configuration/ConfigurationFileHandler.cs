@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using DatabaseManagement.ProjectHelpers;
 using NHibernateRepo.Migrations;
 
 namespace DatabaseManagement.Configuration
@@ -11,7 +12,7 @@ namespace DatabaseManagement.Configuration
     {
         internal string CreateConfigurationFile(string projectPath, string repoName, string migrationFolder, MigrationToUse migrationType)
         {
-            var projectNamespace = new ProjectFileHandler().RootNameSpace(projectPath);
+            var projectNamespace = new ProjectEvalutionHelper().RootNameSpace(projectPath);
             var className = repoName + "Configuration";
 
             var migrationFolderLocation = GetMigrationFolderLocation(projectPath, migrationFolder);

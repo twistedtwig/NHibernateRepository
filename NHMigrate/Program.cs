@@ -120,9 +120,15 @@ namespace NHMigrate
 
         private CriteriaParams ParseParams(string[] args)
         {
+            for (int i = 0; i < args.Length; i++)
+            {
+                args[i] = args[i].ToLower();
+            }
+
             var projectPath = string.Empty;
             var migrationName = string.Empty;
             var optionaRepoName = string.Empty;
+            var configFilePath = string.Empty;
 
             if (args.Length >= 2)
             {
@@ -152,13 +158,27 @@ namespace NHMigrate
                 }
             }
 
+            if (args.Contains("-configfile"))
+            {
+                var configSwitchIndex = args.ToList().IndexOf("-configfile");
+                if (args.Length >= configSwitchIndex + 1)
+                {
+                    configFilePath = args[configSwitchIndex + 1];
+                }
+                else
+                {
+                    Console.WriteLine("ConfigFile switch provided but no file path given");
+                    Environment.Exit(1);
+                }
+            }
+
             if (string.IsNullOrWhiteSpace(projectPath))
             {
                 Console.WriteLine("project file path has not been provided");                
                 Environment.Exit(1);
             }
 
-            return new CriteriaParams(projectPath, optionaRepoName, migrationName);
+            return new CriteriaParams(projectPath, optionaRepoName, migrationName, configFilePath);
         }
     }
 }
