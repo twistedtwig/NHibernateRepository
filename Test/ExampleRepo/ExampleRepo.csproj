@@ -50,7 +50,6 @@
   <ItemGroup>
     <Compile Include="Conventions\IgnoreRepoObjectsConvention.cs" />
     <Compile Include="Migrations\ExampleRepoConfiguration.cs" />
-    <Compile Include="Migrations\ExampleRepoMigrations\20151024150717_add_mad_migration.cs" />
     <Compile Include="Models\BankAccountEntity.cs" />
     <Compile Include="Models\BankEntity.cs" />
     <Compile Include="Models\CustomerEntity.cs" />
