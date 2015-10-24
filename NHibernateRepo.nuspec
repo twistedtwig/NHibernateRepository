@@ -23,7 +23,7 @@
     <file src="NHMigrate\bin\Release\NHMigrate.exe" target="lib\net45" />
     <file src="NHMigrate\bin\Release\DatabaseManagement.dll" target="lib\net45"  />       
 
-    <file src="NHMigrate\init.ps1" target=""  />    
-    <file src="NHMigrate\nhmigrationModule.psm1" target=""  />    
+    <file src="NHMigrate\init.ps1" target="tools"  />    
+    <file src="NHMigrate\nhmigrationModule.psm1" target="tools"  />    
   </files> 
 </package>
