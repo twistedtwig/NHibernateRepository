@@ -12,7 +12,11 @@ namespace NHibernateRepo.Repos
     {
         public string ConnectionStringOrName { get; protected set; }
 
-        internal ISessionFactory SessionFactory;
+        private ISessionFactory _sessionFactory;
+        internal ISessionFactory SessionFactory
+        {
+            get { return _sessionFactory ?? (_sessionFactory = CreateSessionFactory()); }
+        }
 
         private ISession _session;
         internal ISession Session
@@ -27,6 +31,8 @@ namespace NHibernateRepo.Repos
                 return _session;
             }
         }
+
+        internal abstract ISessionFactory CreateSessionFactory();
     }
 
     public abstract class RepoCombined<TEntity> : RepoSplit<TEntity, TEntity>, IRepoCombined<TEntity>
@@ -50,9 +56,7 @@ namespace NHibernateRepo.Repos
                 throw new ArgumentNullException("connectionStringOrName", "Connection string or name must be provided to Repository Base");
             }
 
-            ConnectionStringOrName = connectionStringOrName;
-            var repoSetup = CreateRepoSetup(ConnectionStringOrName);
-//            SessionFactory = repoSetup.SessionFactory;
+            ConnectionStringOrName = connectionStringOrName;            
         }
 
         public RepoTransaction<TEntity, TOverride> BeginTransaction()
@@ -134,6 +138,11 @@ namespace NHibernateRepo.Repos
             return new RepoSetup<TEntity, TOverride>(conString);
         }
 
+        internal override ISessionFactory CreateSessionFactory()
+        {
+            var repoSetup = CreateRepoSetup(ConnectionStringOrName);
+            return repoSetup.SessionFactory;
+        }
 
         #endregion
     }

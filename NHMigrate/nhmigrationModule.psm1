@@ -1,21 +1,4 @@
 
-function GetSolutionPath
-{
-	$solFullPath = $dte.solution.properties.Item("path").value
-	$solPath = $solFullPath.subString(0, $solFullPath.LastIndexOf("\")) + "\"
-
-	$solPath
-	return
-}
-
-function GetRelativeProjectPath($project, $solutionPath){
-
-	$projectRelPath = $project.FullName.Replace($solutionPath, "")
-	$projectRelPath = $dte.solution.properties.Item("Name").value + "\" + $projectRelPath.subString(0, $projectRelPath.LastIndexOf("\"))
-
-	$projectRelPath 
-	return
-}
 
 function FindConfigFile ($project){
 	ForEach ($item in $project.ProjectItems | Where { $_.Name -eq "App.config"  -or $_.Name -eq "Web.config"}) 
@@ -44,21 +27,6 @@ function FindStartUpProject {
 	}
 }
 
-function ReloadProject ($projectPath) {
-	
-	$dte.Windows.Item("{3AE79031-E1BC-11D0-8F78-00A0C9110057}").Activate() 
-	#$dte.ActiveWindow.Object | get-member
-	$dte.ActiveWindow.Object.GetItem($projectPath).Select(1)
-	$dte.ExecuteCommand("Project.UnloadProject")
-	$dte.ExecuteCommand("Project.ReloadProject")
-}
-
-function RefreshScreen {
-	$solPath = GetSolutionPath
-	$project = Get-Project
-	$projectRelPath = GetRelativeProjectPath $project  $solPath	
-	ReloadProject $projectRelPath
-}
 
 function SetupMigrateEXEPath {
 	$path = "E:\Work\nhibernateRepo\NHibernateRepository\NHMigrate\bin\Debug\NHMigrate.exe"

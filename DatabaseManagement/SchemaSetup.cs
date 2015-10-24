@@ -24,7 +24,7 @@ namespace DatabaseManagement
             var status = GetMigrationConfigurationStatus(criteria.ProjectFilePath, criteria.RepoName);
             if (!status.Enabled)
             {
-                Console.WriteLine("Migrations are not enabled");
+                Logger.Log("Migrations are not enabled");
                 return;
             }
 
@@ -73,19 +73,19 @@ namespace DatabaseManagement
 
             if (configType == null)
             {
-                Console.WriteLine("Adding migration configuration");
+                Logger.Log("Adding migration configuration");
                 var filePath = new ConfigurationFileHandler().CreateConfigurationFile(criteria.ProjectPath, repoInfo.RepoType.Name, "Migrations", MigrationToUse.Manual);
                 new ProjectDteHelper().AddFile(criteria.ProjectPath, "Migrations", filePath, showFile: true);                
             }
             else
             {
-                Console.WriteLine("System is already configured for migrations, see class: " + configType.Name);
+                Logger.Log("System is already configured for migrations, see class: " + configType.Name);
             }
 
             var repoBase = TypeHandler.CreateRepoBase(repoInfo.Assembly.Location, repoInfo.RepoType);
             
             //create migration log table, if it doesn't exist.
-            var updater = CreateSchemaUpdater(criteria.ProjectPath, typeof(MigrationRepo), repoBase.ConnectionStringOrName);
+            var updater = CreateSchemaUpdater(criteria.ProjectPath, typeof(MigrationRepo), criteria.ConfigFilePath, repoBase.ConnectionStringOrName);
             updater.Execute(false, true);
 
             //clean up
@@ -108,21 +108,21 @@ namespace DatabaseManagement
             var configurationStatus = GetMigrationConfigurationStatus(criteria.ProjectFilePath, criteria.RepoName);
             if (!configurationStatus.Enabled)
             {
-                Console.WriteLine("Migrations are not enabled, can not apply any migrations.");
+                Logger.Log("Migrations are not enabled, can not apply any migrations.");
                 return;
             }
 
             if (configurationStatus.MigrationType != MigrationToUse.Automatic)
             {
-                Console.WriteLine("automatic Migrations are not enabled, can not apply any migrations.");
+                Logger.Log("automatic Migrations are not enabled, can not apply any migrations.");
                 return;
             }
 
             var repoInfo = TypeHandler.FindSingleRepo(criteria.ProjectFilePath, criteria.RepoName);
             //if null we need to drop out.
             if (repoInfo == null) return;
-          
-            var updater = CreateSchemaUpdater(repoInfo.Assembly.Location, repoInfo.RepoType);    
+
+            var updater = CreateSchemaUpdater(repoInfo.Assembly.Location, repoInfo.RepoType, criteria.ConfigFilePath);    
             updater.Execute(false, true);
 
             //clean up
@@ -138,27 +138,35 @@ namespace DatabaseManagement
             var configurationStatus = GetMigrationConfigurationStatus(criteria.ProjectFileLocation, criteria.RepoName);
             if (!configurationStatus.Enabled)
             {
-                Console.WriteLine("Migrations are not enabled, can not create any migrations.");
+                Logger.Log("Migrations are not enabled, can not create any migrations.");
                 return;
             }
 
             if (configurationStatus.MigrationType != MigrationToUse.Manual)
             {
-                Console.WriteLine("Manual Migrations are not enabled, can not create manual migrations.");
+                Logger.Log("Manual Migrations are not enabled, can not create manual migrations.");
                 return;
             }
             
             var repoInfo = TypeHandler.FindSingleRepo(criteria.ProjectFileLocation, criteria.RepoName);
             //if null we need to drop out.
-            if(repoInfo == null) return;
+            if (repoInfo == null)
+            {
+                Logger.Log("Unable to find repo");
+                return;
+            }
             //ensure that we have the case correct.
             criteria.RepoName = repoInfo.RepoType.Name;
 
             var configuration = TypeHandler.FindConfiguration(criteria.ProjectFileLocation, repoInfo.RepoType);
             //if null something bad happend, drop out
-            if(configuration == null) return;
+            if (configuration == null)
+            {
+                Logger.Log("unable to find configuration file");
+                return;
+            }
 
-            var updater = CreateSchemaUpdater(repoInfo.Assembly.Location, repoInfo.RepoType);    
+            var updater = CreateSchemaUpdater(repoInfo.Assembly.Location, repoInfo.RepoType, criteria.ConfigFilePath);    
        
             var fileMigrationHandler = new MigrationFileHandler(updater);
             var projectFileHandler = new ProjectDteHelper();
@@ -168,7 +176,7 @@ namespace DatabaseManagement
 
             var filePath = fileMigrationHandler.CreateFile(criteria);           
             projectFileHandler.AddFile(criteria.ProjectFileLocation, configuration.RootMigrationFolder, filePath, showFile: true);
-
+            Logger.Log("Created migration file.");
 
             //clean up
             ProjectEvalutionHelper.FinishedWithProject(criteria.ProjectFileLocation);
@@ -184,13 +192,13 @@ namespace DatabaseManagement
             var configurationStatus = GetMigrationConfigurationStatus(criteria.ProjectPath, criteria.RepoName);
             if (!configurationStatus.Enabled)
             {
-                Console.WriteLine("Migrations are not enabled, can not apply any migrations.");
+                Logger.Log("Migrations are not enabled, can not apply any migrations.");
                 return;
             }
 
             if (configurationStatus.MigrationType != MigrationToUse.Manual)
             {
-                Console.WriteLine("Manual Migrations are not enabled, can not apply any migrations.");
+                Logger.Log("Manual Migrations are not enabled, can not apply any migrations.");
                 return;
             }
             
@@ -226,15 +234,17 @@ namespace DatabaseManagement
         /// <param name="repoType"></param>
         /// <param name="args">optional constructor arguments</param>
         /// <returns></returns>
-        private SchemaUpdate CreateSchemaUpdater(string projectdllPath, Type repoType, params object[] args)
+        private SchemaUpdate CreateSchemaUpdater(string projectdllPath, Type repoType, string configFilePath, params object[] args)
         {
             var repoBase = TypeHandler.CreateRepoBase(projectdllPath, repoType, args);
             MethodInfo createRepoSetupMethod = repoType.GetMethod("CreateRepoSetup", BindingFlags.Instance | BindingFlags.NonPublic);
-            var repoSetup = createRepoSetupMethod.Invoke(repoBase, new object[] { "Data Source=localhost;database=jontest;Integrated Security=true;" }); //new object[] { "connectionString" }
-            
+            var connectionString = ConnectionStringHandler.FindConnectionString(repoBase, configFilePath);
+
+           var repoSetup = createRepoSetupMethod.Invoke(repoBase, new object[] { connectionString }); 
+
             var createConfigMethod = repoSetup.GetType().GetMethod("CreateConfiguration", BindingFlags.Instance | BindingFlags.NonPublic);
             var config = createConfigMethod.Invoke(repoSetup, null) as FluentConfiguration;
-
+            
             var updater = new SchemaUpdate(config.BuildConfiguration());
             return updater;
         }

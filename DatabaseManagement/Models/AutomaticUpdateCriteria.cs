@@ -5,5 +5,6 @@ namespace DatabaseManagement.Models
     {
         public string ProjectFilePath { get; set; }
         public string RepoName { get; set; }
+        public string ConfigFilePath { get; set; }
     }
 }

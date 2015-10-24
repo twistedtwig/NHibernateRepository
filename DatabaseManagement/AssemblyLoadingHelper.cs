@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -89,7 +88,7 @@ namespace DatabaseManagement
             {
                 if (stream == null)
                 {
-                    Debug.Print("Error! Unable to find '" + dllName + "'");
+                    Logger.Log("Error! Unable to find '" + dllName + "'", true);
                     // Uncomment the next lines to show message the moment an assembly is not found. (This will also stop for .Net assemblies
                     //MessageBox.Show("Error! Unable to find '" + dllName + "'! Application will terminate.");
                     //Environment.Exit(0);

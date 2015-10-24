@@ -1,4 +1,4 @@
-# NHibernateRepository
+#NHibernateRepository
 Generic NHibernate Repository
 
 The goal of this project is to provide a clean repository layer that tries to return sensible objects from the db entities.  It allows abstraction from a database or ORM and makes testing easier.
@@ -50,9 +50,22 @@ using (var transcation = repo.BeginTransaction())
 }
 ```
 
-When updating a the database this can be achieved it two ways.  Automatic updates so the shcema is brought into line with the schema as is by the code.  This doesn't allow for stored procedures or data changes.
+##Database Management
+
+
+Within this project there is a tool called NHMigrate.exe.  This is designed to assist with managing the database in a code first style.  The application can be used in two ways:
+
+1) within VS using package manager console - should be used for development, it wraps up the EXE for ease of use.
+2) using the EXE directly - only needs to be used for automated deployments
+
+
+When updating a database this can be achieved it two ways.  Automatic updates so the shcema is brought into line with the schema as is by the code.  This doesn't allow for stored procedures or data changes.
 The second approach is to migrations.  Every time a schema or data change is required create a migration within the repository project.
 
-TODO:
+###Powershell Commands
 
-Make a way of managing the database.  Want to imitate Entity Framework code first and migrations.
+
+- Enable-NHMigrations
+- Add-NHMigration
+- Update-NHMigrations
+

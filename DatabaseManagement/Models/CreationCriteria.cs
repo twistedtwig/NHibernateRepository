@@ -8,5 +8,7 @@ namespace DatabaseManagement.Models
         public string RepoName { get; set; }
 
         internal string MigrationPath { get; set; }
+        public string ConfigFilePath { get; set; }
+
     }
 }

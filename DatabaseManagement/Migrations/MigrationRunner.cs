@@ -19,17 +19,18 @@ namespace DatabaseManagement.Migrations
             }
 
             var repoBase = TypeHandler.CreateRepoBase(repoInfo.Assembly.Location, repoInfo.RepoType);
-            ConnectionStringHandler.SubsituateConnectionString(repoBase, criteria.ConfigFilePath);
+            var connectionString = ConnectionStringHandler.FindConnectionString(repoBase, criteria.ConfigFilePath);
+            ConnectionStringHandler.OverrideConnectionString(repoBase, connectionString);
 
             var migrationTypes = TypeHandler.FindAllMigrations(criteria.ProjectPath, repoInfo.RepoType);
 
             if (migrationTypes == null || !migrationTypes.Any())
             {
-                Console.WriteLine("No migrations to run.");
+                Logger.Log("No migrations to run.");
                 return;
             }
 
-            var migrationRepo = new MigrationRepo(repoBase.ConnectionStringOrName);
+            var migrationRepo = new MigrationRepo(connectionString);
             var doneMigrations = migrationRepo.GetMigrationsThatHaveRun(repoInfo.RepoType.Name);
             //only run on migrations that have not been run yet.
             //order by name, ie. datestamp.
@@ -38,7 +39,7 @@ namespace DatabaseManagement.Migrations
                 var migration = Activator.CreateInstance(migrationType) as AbstractBaseMigration;
                 if (migration == null)
                 {
-                    Console.WriteLine("Error creating migration: " + migrationType.Name);
+                    Logger.Log("Error creating migration: " + migrationType.Name);
                     throw new ApplicationException("Error creating migration: " + migrationType.Name);
                 }
 
@@ -46,7 +47,7 @@ namespace DatabaseManagement.Migrations
                 PropertyInfo baseRepoPropertyInfo = migrationType.GetProperty("BaseRepo", BindingFlags.Instance | BindingFlags.NonPublic);
                 baseRepoPropertyInfo.SetValue(migration, repoBase);
 
-                Console.WriteLine("Executing Migration: {0}", migrationType.Name);
+                Logger.Log(string.Format("Executing Migration: {0}", migrationType.Name));
                 migration.Execute();
                 migrationRepo.LogMigrationRan(migrationType.Name, repoInfo.RepoType.Name);
             }

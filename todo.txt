@@ -1,25 +1,18 @@
 
-BUG: need to remove connection string dependency from running app.
+need to get the powershell script to copy nhmigrate (the exe) to the repo folder before it runs, then clean up afterwards. (this is so NH can find the DLLs)
 
-BUG: when running it on a project that doesn't have a repo it throws unable to load project error.. not the most helpful.
-
-BUG: need to get config file path or something.  need to change when sessions factory is created, (out of constructor), inject real connection string if name matches one of the conn strings from config file.
-
-
-
-
-ensure exe works
+test from powershell
 
 -----------------
 EXE runner examples:
 
-enable-migrations E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj -repo examplerepo
-Add-Migration E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj init_mig -repo examplerepo
+enable-migrations "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj" -repo examplerepo -configFile "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\App.config" 
+add-migration "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj" -repo examplerepo -configFile "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\App.config" -filename add_mad_migration
+update-database "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj" -repo examplerepo -confiGfile "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\App.config" 
 
 -----------------
 
 
-have issue that connection string is not being found... need to pass in the startup project and some how inject the connection string
 
 
 make nhmigrate embed all the DLL's it uses => http://stackoverflow.com/questions/189549/embedding-dlls-in-a-compiled-executable
@@ -46,6 +39,8 @@ figure out how to get powershell to be first class citizen of PMC
 
 do powershell stuff
 
+
+ensure that paths can be relative, dont have to fully path.
 
 make a migration completely transactional.  all executesql commands in one transaction.. probably do not use nhibernate at all at that point.
 

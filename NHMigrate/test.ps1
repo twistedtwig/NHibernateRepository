@@ -1,11 +1,11 @@
 
 function GetSolutionPath
 {
-$solFullPath = $dte.solution.properties.Item("path").value
-$solPath = $solFullPath.subString(0, $solFullPath.LastIndexOf("\")) + "\"
+	$solFullPath = $dte.solution.properties.Item("path").value
+	$solPath = $solFullPath.subString(0, $solFullPath.LastIndexOf("\")) + "\"
 
-$solPath
-return
+	$solPath
+	return
 }
 
 function GetRelativeProjectPath($project, $solutionPath){
@@ -26,6 +26,12 @@ function ReloadProject ($projectPath) {
 	$dte.ExecuteCommand("Project.ReloadProject")
 }
 
+function RefreshScreen {
+	$solPath = GetSolutionPath
+	$project = Get-Project
+	$projectRelPath = GetRelativeProjectPath $project  $solPath	
+	ReloadProject $projectRelPath
+}
 
 
 
@@ -88,11 +94,41 @@ clear
 
 
 
+function CopyMigrationToBin {
+	$sp = FindStartUpProject
+	$p = $sp.FullName
+	$s = $p.subString(0, $p.LastIndexOf("\"))
+	
+	$configStr = $dte.solution.properties.Item("ActiveConfig").value
+	$config = $configStr.subString(0, $configStr.LastIndexOf("|"))
+	
+	$path = [io.path]::combine($s, 'bin', $config)
+	
+	$currentLoc = Get-Location
+	$loc = $currentLoc.Path
+
+	$packagesFolder = Get-ChildItem $loc -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "packages"}
+	$nhmigrateFolder = Get-ChildItem $packagesFolder -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -like "VSSDK.Shell.Interop.*"}
+	#$nhmigrateFolder = Get-ChildItem $packagesFolder -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -like "NHMigrate.*"}
+	
+	if($nhmigrateFolder.length -ge 1){
+		$pack = $nhmigrateFolder[$nhmigrateFolder.length-1]
+		#copy nhmigrate.exe to $path
+	}
+	else{
+		write-host "ERROR: Could not find NHMigrate"
+	}
+}
+
+
+CopyMigrationToBin
 
 
 
-#$sp = FindStartUpProject
-#$sp
+
+#$currentLoc | Get-Member
+
+
 #write-host("config file for startup project")
 #$confFile = FindConfigFile $sp
 #$confFile
@@ -100,9 +136,9 @@ clear
 
 
 
-import-module E:\Work\nhibernateRepo\NHibernateRepository\NHMigrate\nhmigrationModule.psm1
-enable-nhmigrations -repo exampleRepo
-remove-module nhmigrationModule
+#import-module E:\Work\nhibernateRepo\NHibernateRepository\NHMigrate\nhmigrationModule.psm1
+#enable-nhmigrations -repo exampleRepo
+#remove-module nhmigrationModule
 
 
 

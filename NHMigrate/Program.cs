@@ -48,7 +48,8 @@ namespace NHMigrate
             var criteria = new EnableMigrationsCriteria
             {
                 ProjectPath = criteriaParmas.ProjectPath,
-                RepoName = criteriaParmas.OptionalRepoName
+                RepoName = criteriaParmas.OptionalRepoName,
+                ConfigFilePath = criteriaParmas.ConfigFilePath,
             };
 
             var setup = new SchemaSetup();
@@ -64,6 +65,7 @@ namespace NHMigrate
                 ProjectFileLocation = criteriaParmas.ProjectPath,
                 FileName =criteriaParmas.MigrationName,
                 RepoName = criteriaParmas.OptionalRepoName,
+                ConfigFilePath = criteriaParmas.ConfigFilePath,
             };
 
             var setup = new SchemaSetup();
@@ -77,7 +79,8 @@ namespace NHMigrate
             var criteria = new ApplyMigrationCriteria
             {
                 ProjectPath = criteriaParmas.ProjectPath,
-                RepoName = criteriaParmas.OptionalRepoName
+                RepoName = criteriaParmas.OptionalRepoName,
+                ConfigFilePath = criteriaParmas.ConfigFilePath,
             };
 
             var setup = new SchemaSetup();
@@ -110,6 +113,8 @@ namespace NHMigrate
             Console.WriteLine("                                 match the code first model.  If set to manual it will run all migration");
             Console.WriteLine("                                 files that have been created.");
             Console.WriteLine("");
+            Console.WriteLine("To add debug messages use -debug flag.");
+            Console.WriteLine("");
             Console.WriteLine("If a repo name is not provided the system will attempt to determine which repository to use.");
             Console.WriteLine("If there are multiple repositories in the same assembly it will not know how to choose one.");
             Console.WriteLine("");
@@ -135,13 +140,9 @@ namespace NHMigrate
                 projectPath = args[1];
             }
 
-            if (args.Length >= 3)
+            if (args.Contains("-debug"))
             {
-                var name = args[2];
-                if(name != "-repo")
-                {                    
-                    migrationName = name;
-                }
+                Logger.IsDebugging = true;
             }
 
             if (args.Contains("-repo"))
@@ -164,6 +165,20 @@ namespace NHMigrate
                 if (args.Length >= configSwitchIndex + 1)
                 {
                     configFilePath = args[configSwitchIndex + 1];
+                }
+                else
+                {
+                    Console.WriteLine("ConfigFile switch provided but no file path given");
+                    Environment.Exit(1);
+                }
+            }
+
+            if (args.Contains("-filename"))
+            {
+                var fileNameSwitchIndex = args.ToList().IndexOf("-filename");
+                if (args.Length >= fileNameSwitchIndex + 1)
+                {
+                    migrationName = args[fileNameSwitchIndex + 1];
                 }
                 else
                 {

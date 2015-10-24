@@ -115,26 +115,50 @@ namespace DatabaseManagement.ProjectHelpers
         {
             var loc = Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf("\\")), name);
 
-            var folders = name.Split(new [] { '\\'});
+            /*
+             * 
+             * want to find the lowest level for folder path.  issue is there last folder already exists.
+             * if it doesnt its fine.  if it does then it adds the folder and file again.
+             * 
+             * something like parent item.....
+             * 
+             * 
+             * 
+             * 
+             * if folder depth is just one then should be added to root
+             * 
+             * if it is greater should go all the way down until end but one.
+             * 
+             * 
+             */
 
-            ProjectItem currentProjectItem = null;
-            foreach (var folder in folders)
+            var folders = name.Split(new[] { '\\' });
+
+            if (folders.Length < 2)
             {
-                var iterator = project.ProjectItems.GetEnumerator();
-                while (iterator.MoveNext())
-                {
-                    var item = iterator.Current as ProjectItem;
-                    if (item != null && item.Name == folder)
-                    {
-                        //found that folder, now look through that one to see if we can find the next level
-                        currentProjectItem = item;
-                        break;
-                    }
-                }                
+                project.ProjectItems.AddFromDirectory(loc);
             }
+            else
+            {
+                ProjectItem currentProjectItem = null;
+                for (int i = 0; i < folders.Length -1; i++)
+                {
+                    var iterator = project.ProjectItems.GetEnumerator();
+                    while (iterator.MoveNext())
+                    {
+                        var item = iterator.Current as ProjectItem;
+                        if (item != null && item.Name == folders[i])
+                        {
+                            //found that folder, now look through that one to see if we can find the next level
+                            currentProjectItem = item;
+                            break;
+                        }
+                    }    
+                }
 
-            var projItems = currentProjectItem != null ? currentProjectItem.ProjectItems : project.ProjectItems;
-            projItems.AddFromDirectory(loc);           
+                var projItems = currentProjectItem != null ? currentProjectItem.ProjectItems : project.ProjectItems;
+                projItems.AddFromDirectory(loc);      
+            }     
         }
     }
 }

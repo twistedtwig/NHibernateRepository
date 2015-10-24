@@ -29,14 +29,14 @@ namespace DatabaseManagement
             var repoBase = args == null || !args.Any() ? Activator.CreateInstance(typeofRepo) : Activator.CreateInstance(typeofRepo, args);
             if (repoBase == null)
             {
-                Console.WriteLine("Couldn't create repo, must have parameterless constructor");
+                Logger.Log("Couldn't create repo, must have parameterless constructor");
                 return null;
             }
 
             var repo = repoBase as BaseRepo;
             if (repo == null)
             {
-                Console.WriteLine("Repo created does not inherit from BaseRepo");
+                Logger.Log("Repo created does not inherit from BaseRepo");
                 return null;
             }
 
@@ -69,13 +69,13 @@ namespace DatabaseManagement
                 var repos = repoTypes.Where(r => r.Name.Equals(optionalRepoName, StringComparison.InvariantCultureIgnoreCase)).ToArray();
                 if (!repos.Any())
                 {
-                    Console.WriteLine("No repo class found with name: " + optionalRepoName);
+                    Logger.Log("No repo class found with name: " + optionalRepoName);
                     return null;
                 }
 
                 if (repos.Count() > 1)
                 {
-                    Console.WriteLine("More than one repo with same name found, please ensure repo is uniquely named in repo project.");
+                    Logger.Log("More than one repo with same name found, please ensure repo is uniquely named in repo project.");
                     return null;
                 }
 
@@ -84,13 +84,13 @@ namespace DatabaseManagement
 
             if (!repoTypes.Any())
             {
-                Console.WriteLine("No repo class found");
+                Logger.Log("No repo class found");
                 return null;
             }
 
             if (repoTypes.Count() > 1)
             {
-                Console.WriteLine("More than one repo found, please specify which repo to use.");
+                Logger.Log("More than one repo found, please specify which repo to use.");
                 return null;
             }
 

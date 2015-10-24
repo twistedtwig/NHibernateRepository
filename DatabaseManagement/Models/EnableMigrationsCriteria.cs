@@ -12,7 +12,7 @@ namespace DatabaseManagement.Models
         /// </summary>
         public string RepoName { get; set; }
         /// <summary>
-        /// Optional path to the configuration file used for connection string info
+        /// path to the configuration file used for connection string info
         /// </summary>
         public string ConfigFilePath { get; set; }
     }
