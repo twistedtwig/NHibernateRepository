@@ -13,6 +13,12 @@ update-database "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\Ex
 -----------------
 
 
+nuget package to include nhmigrate and powershell scripts
+
+
+
+
+
 
 
 make nhmigrate embed all the DLL's it uses => http://stackoverflow.com/questions/189549/embedding-dlls-in-a-compiled-executable

@@ -19,6 +19,11 @@
   </metadata>
  <files>
     <file src="NHibernateRepo\bin\Release\NHibernateRepo.dll" target="lib\net45" />
-    <file src="NHibernateRepo\bin\Release\NHibernateRepo.pdb" target="lib\net45"  />           
+    <file src="NHibernateRepo\bin\Release\NHibernateRepo.pdb" target="lib\net45"  /> 
+    <file src="NHMigrate\bin\Release\NHMigrate.exe" target="lib\net45" />
+    <file src="NHMigrate\bin\Release\DatabaseManagement.dll" target="lib\net45"  />       
+
+    <file src="NHMigrate\init.ps1" target=""  />    
+    <file src="NHMigrate\nhmigrationModule.psm1" target=""  />    
   </files> 
 </package>
