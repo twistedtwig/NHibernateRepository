@@ -35,16 +35,14 @@ namespace NHibernateRepo.Repos
         internal abstract ISessionFactory CreateSessionFactory();
     }
 
-    public abstract class RepoCombined<TEntity> : RepoSplit<TEntity, TEntity>, IRepoCombined<TEntity>
-        where TEntity : class
+    public abstract class RepoCombined<TEntity> : RepoSplit<TEntity, TEntity>, IRepoCombined<TEntity> where TEntity : class
     {
         protected RepoCombined(string connectionStringOrName) : base(connectionStringOrName)
         {
         }
     }
 
-    public abstract class RepoSplit<TEntity, TOverride> 
-        : BaseRepo, IRepoSplit<TEntity, TOverride>        
+    public abstract class RepoSplit<TEntity, TOverride> : BaseRepo, IRepoSplit<TEntity, TOverride>        
         where TEntity : class
         where TOverride : class
     {

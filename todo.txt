@@ -1,3 +1,5 @@
+try and get one base IRepo class - or update docs to reflect this change
+
 
 need to get the powershell script to copy nhmigrate (the exe) to the repo folder before it runs, then clean up afterwards. (this is so NH can find the DLLs)
 
@@ -18,7 +20,7 @@ nuget package to include nhmigrate and powershell scripts
 
 
 
-
+Error checking and nice message to user that if they try and add a migration before a config is added they know why it failed.
 
 
 make nhmigrate embed all the DLL's it uses => http://stackoverflow.com/questions/189549/embedding-dlls-in-a-compiled-executable
