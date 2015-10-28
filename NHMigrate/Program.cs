@@ -96,6 +96,8 @@ namespace NHMigrate
             Console.WriteLine("     NHMigrate is a command line application that manages an NHibernate .net applicaiton.");
             Console.WriteLine("     A user can update their database from the class models, (code first model).");
             Console.WriteLine("");
+            Console.WriteLine("     See https://github.com/twistedtwig/NHibernateRepositor for more inforation.");
+            Console.WriteLine("");
             Console.WriteLine("USAGE:");
             Console.WriteLine("     nhmigration [command] <projectFilePath> <optional2> -repo <optionalRepoName>");
             Console.WriteLine("");

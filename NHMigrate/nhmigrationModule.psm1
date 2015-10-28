@@ -29,7 +29,7 @@ function FindStartUpProject {
 
 
 function SetupMigrateEXEPath {
-	$path = "E:\Work\nhibernateRepo\NHibernateRepository\NHMigrate\bin\Debug\NHMigrate.exe"
+	$path = "..\lib\net45\NHMigrate.exe"
 	$path
 	return 
 }
