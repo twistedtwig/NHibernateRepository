@@ -120,3 +120,54 @@ Only use when migration type set to manual migrations. Requires one parameter (w
 ####Update-NHMigrations
 
 No extra parameters are required except if there are multiple repositories, use the optional "-repo CLASSNAME" flag if required.
+
+###Running NHMigrate.exe directly
+
+The main time that you would want to run it directly is for automated processes, such as deploying an application.  Currently there are two files:
+
+ - NHMigrate.exe
+ - DatabaseManagement.dll
+
+For them to work they need to be placed in the same folder as the built Repository DLL.  This is due to Windows trying to find DLL's that are referenced from that project but are not in the GAC. The applicaiton take a number of parameters, the command then optional flags.  The commands are:
+
+ - HELP
+ - ENABLE-MIGRATIONS
+ - ADD-MIGRATION
+ - UPDATE-DATABASE
+
+There are a number of standard parameters the system can take:
+
+ - The first parameter must always be the repository project path
+ - -debug - Will show more verbose logging
+ - -repo - the name of the repo to use, only required if mulitple repos in repository project
+ - -configfile - the path to the configuration file that contains the connection string.
+ - -filename - used for adding migration, the name will be the name of the migration file
+
+####Help
+
+Will display a general help message explaining how to use the application.
+
+####ENABLE-MIGRATIONS
+
+Enable migrations will require:
+
+ - project file path
+ - config file path
+ - repo name (optional)
+
+####ADD-MIGRATION
+
+Adding a new migration will require:
+
+ - project file path
+ - config file path
+ - migration file name
+ - repo name (optional)
+
+####UPDATE-DATABASE
+
+Updating the database will require:
+
+ - project file path
+ - config file path
+ - repo name (optional)
