@@ -18,14 +18,14 @@ namespace TestConsoleWorker
         {
             CopyDllsForDomainLoadingDebug(@"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\bin\debug");
 
-
+            Logger.IsDebugging = true;
             var setup = new SchemaSetup();
                                                                     
             setup.EnableMigrations(new EnableMigrationsCriteria
             {
                 ProjectPath = @"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\examplerepo.csproj",
                 RepoName = "examplerepo",
-                ConfigFilePath = @"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\App.config"
+                ConfigFilePath = @"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\App.config",                
             });
 
 

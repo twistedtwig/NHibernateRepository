@@ -24,8 +24,17 @@ namespace DatabaseManagement.ProjectHelpers
             project.Build();
 
             var outputPath = project.GetPropertyValue("OutputPath");
-            Logger.Log("Project file outputpath: " + outputPath, isDebugMessage: true);
-            
+            Logger.Log("Project file outputpath: " + (string.IsNullOrWhiteSpace(outputPath) ? outputPath : "output path was EMPTY -- this might cause an error"), isDebugMessage: true);
+
+            if (string.IsNullOrWhiteSpace(outputPath))
+            {
+                foreach (var prop in project.Properties)
+                {
+                    Logger.Log(prop.Name, true);
+                }
+            }
+
+
             var name = project.GetPropertyValue("AssemblyName");
             Logger.Log("Project file assembly name: " + name, isDebugMessage: true);
             
