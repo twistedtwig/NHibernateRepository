@@ -24,13 +24,14 @@ namespace DatabaseManagement.ProjectHelpers
             project.Build();
 
             var outputPath = project.GetPropertyValue("OutputPath");
-            Logger.Log("Project file outputpath: " + (string.IsNullOrWhiteSpace(outputPath) ? outputPath : "output path was EMPTY -- this might cause an error"), isDebugMessage: true);
+            Logger.Log("Project file outputpath: " + (!string.IsNullOrWhiteSpace(outputPath) ? outputPath : "output path was EMPTY -- this might cause an error"), isDebugMessage: true);
 
             if (string.IsNullOrWhiteSpace(outputPath))
             {
+                Logger.Log("output null", true);
                 foreach (var prop in project.Properties)
                 {
-                    Logger.Log(prop.Name, true);
+                    Logger.Log(string.Format("{0} {1} {2}", prop.Name, prop.UnevaluatedValue, prop.EvaluatedValue), true);
                 }
             }
 
