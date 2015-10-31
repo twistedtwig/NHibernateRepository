@@ -6,7 +6,7 @@ function FindConfigFile ($project){
 		$configName = $item.FileNames(1)
 
 		if($configName -ne $null -and $configName -ne ""){
-			$configName 
+			"""$configName"""
 			return
 		}
 	} 
@@ -29,8 +29,8 @@ function FindStartUpProject {
 
 
 function SetupMigrateEXEPath {
-	$path = "..\lib\net45\NHMigrate.exe"
-	$path
+	$path = [System.IO.Path]::GetFullPath((join-path (Split-Path -parent $PSCommandPath) "..\lib\net45\NHMigrate.exe"))
+	"""$path"""
 	return 
 }
 
@@ -82,7 +82,7 @@ function Enable-NHMigrations ($args) {
 	$startupProject = FindStartUpProject
 	$startupConfigPath = FindConfigFile $startupProject
 
-	$argString = "Enable-Migrations " + $projPath + " " + $otherArgs + " -configFile " + $startupConfigPath
+	$argString = "Enable-Migrations " + """$projPath""" + " " + $otherArgs + " -configFile " + $startupConfigPath
 	
 	runExe $exePath $argString
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Build.Evaluation;
+﻿using FluentNHibernate.Conventions.AcceptanceCriteria;
+using Microsoft.Build.Evaluation;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -17,6 +18,7 @@ namespace DatabaseManagement.ProjectHelpers
         /// <returns></returns>
         internal Assembly LoadEvalutionProject(string projectPath)
         {
+            Logger.Log("Loading project file: " + projectPath, isDebugMessage: true);
             var project = GetEvalutionProject(projectPath);
             project.Build();
 
@@ -60,6 +62,7 @@ namespace DatabaseManagement.ProjectHelpers
            var project = ProjectCollection.GlobalProjectCollection.LoadedProjects.FirstOrDefault(p => p.ProjectFileLocation.LocationString == projectPath);
            if (project != null)
            {
+               Logger.Log("Project collection already loaded and found: " + projectPath, isDebugMessage: true);
                return project;
            }
 
