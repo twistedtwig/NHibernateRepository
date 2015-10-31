@@ -20,12 +20,14 @@ namespace DatabaseManagement.ProjectHelpers
         {
             Logger.Log("Loading project file: " + projectPath, isDebugMessage: true);
             var project = GetEvalutionProject(projectPath);
+            Logger.Log("Building project file", isDebugMessage: true);
             project.Build();
 
             var outputPath = project.GetPropertyValue("OutputPath");
             var name = project.GetPropertyValue("AssemblyName");
             var fullPath = Path.Combine(project.DirectoryPath, outputPath);
 
+            Logger.Log("Loading DLL: " + fullPath, isDebugMessage: true);
             var path = Path.Combine(fullPath, name + ".dll");
             var projectAssembly = Assembly.LoadFile(path);
 
