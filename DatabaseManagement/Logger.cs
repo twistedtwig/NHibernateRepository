@@ -20,8 +20,9 @@ namespace DatabaseManagement
 		/// before any events are raised.
 		/// </summary>
 		public override void Initialize(IEventSource eventSource)
-		{
-			
+		{          
+            if(eventSource == null) throw new ArgumentNullException("eventSource", "Event source in MS Build logger is null");
+
 			// For brevity, we'll only register for certain event types. Loggers can also
 			// register to handle TargetStarted/Finished and other events.
 			eventSource.ProjectStarted += new ProjectStartedEventHandler(eventSource_ProjectStarted);
