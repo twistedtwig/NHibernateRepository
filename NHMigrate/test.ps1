@@ -121,7 +121,7 @@ function CopyMigrationToBin {
 }
 
 
-CopyMigrationToBin
+#CopyMigrationToBin
 
 
 
@@ -136,9 +136,9 @@ CopyMigrationToBin
 
 
 
-#import-module E:\Work\nhibernateRepo\NHibernateRepository\NHMigrate\nhmigrationModule.psm1
-#enable-nhmigrations -repo exampleRepo
-#remove-module nhmigrationModule
+import-module E:\Work\nhibernateRepo\NHibernateRepository\NHMigrate\nhmigrationModule.psm1
+enable-nhmigrations -repo exampleRepo -debug
+remove-module nhmigrationModule
 
 
 

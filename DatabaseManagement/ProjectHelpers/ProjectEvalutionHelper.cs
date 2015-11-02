@@ -21,21 +21,11 @@ namespace DatabaseManagement.ProjectHelpers
             Logger.Log("Loading project file: " + projectPath, isDebugMessage: true);
             var project = GetEvalutionProject(projectPath);
             Logger.Log("Building project file", isDebugMessage: true);
-            project.Build();
+            project.Build(new Logger());
 
             var outputPath = project.GetPropertyValue("OutputPath");
             Logger.Log("Project file outputpath: " + (!string.IsNullOrWhiteSpace(outputPath) ? outputPath : "output path was EMPTY -- this might cause an error"), isDebugMessage: true);
-
-            if (string.IsNullOrWhiteSpace(outputPath))
-            {
-                Logger.Log("output null", true);
-                foreach (var prop in project.Properties)
-                {
-                    Logger.Log(string.Format("{0} {1} {2}", prop.Name, prop.UnevaluatedValue, prop.EvaluatedValue), true);
-                }
-            }
-
-
+            
             var name = project.GetPropertyValue("AssemblyName");
             Logger.Log("Project file assembly name: " + name, isDebugMessage: true);
             
