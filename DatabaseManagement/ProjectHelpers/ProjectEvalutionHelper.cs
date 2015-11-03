@@ -21,7 +21,7 @@ namespace DatabaseManagement.ProjectHelpers
             Logger.Log("Loading project file: " + projectPath, isDebugMessage: true);
             var project = GetEvalutionProject(projectPath);
             Logger.Log("Building project file", isDebugMessage: true);
-            project.SetGlobalProperty("Configuration", "Debug");
+//            project.SetGlobalProperty("Configuration", "Debug");
             project.Build(new Logger());
 
             var outputPath = project.GetPropertyValue("OutputPath");
