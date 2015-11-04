@@ -184,5 +184,15 @@ namespace DatabaseManagement
                 .Where(baseType.IsAssignableFrom)
                 .ToArray();
         }
+
+        /// <summary>
+        /// Determines if the type given has an empty constructor
+        /// </summary>
+        /// <param name="objType"></param>
+        /// <returns></returns>
+        internal static bool DoesTypeHaveEmptyConstructor(Type objType)
+        {
+            return objType.GetConstructor(Type.EmptyTypes) != null;
+        }
     }
 }

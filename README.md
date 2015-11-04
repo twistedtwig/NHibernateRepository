@@ -23,6 +23,7 @@ Repository Models Project:
 ]
 
 ```
+All Repo objects must have an empty constructor (can have multiple constructors) to allow NHMigrate to work correctly.
 Here is an simple example of how to setup a RepositoryObject
 
 ```c#

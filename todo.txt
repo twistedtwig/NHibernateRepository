@@ -1,3 +1,5 @@
+add check before any action runs to ensure empty constructor exists for repo.
+
 try and get one base IRepo class - or update docs to reflect this change
 
 

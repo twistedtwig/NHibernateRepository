@@ -71,6 +71,8 @@ namespace DatabaseManagement
             //this should not happen. should only ever have one config per repo type.
             if(multipleFound) return;
 
+            AssertRepoHasEmptyConstructor(configType);
+
             if (configType == null)
             {
                 Logger.Log("Adding migration configuration");
@@ -122,11 +124,21 @@ namespace DatabaseManagement
             //if null we need to drop out.
             if (repoInfo == null) return;
 
+            AssertRepoHasEmptyConstructor(repoInfo.RepoType);
+
             var updater = CreateSchemaUpdater(repoInfo.Assembly.Location, repoInfo.RepoType, criteria.ConfigFilePath);    
             updater.Execute(false, true);
 
             //clean up
             ProjectEvalutionHelper.FinishedWithProject(criteria.ProjectFilePath);
+        }
+
+        private static void AssertRepoHasEmptyConstructor(Type repoType)
+        {
+            if (!TypeHandler.DoesTypeHaveEmptyConstructor(repoType))
+            {
+                throw new ApplicationException(string.Format("Repo type '{0}' must have an empty constructor", repoType));
+            }
         }
 
         /// <summary>
@@ -155,6 +167,9 @@ namespace DatabaseManagement
                 Logger.Log("Unable to find repo");
                 return;
             }
+            
+            AssertRepoHasEmptyConstructor(repoInfo.RepoType);
+
             //ensure that we have the case correct.
             criteria.RepoName = repoInfo.RepoType.Name;
 
@@ -201,6 +216,12 @@ namespace DatabaseManagement
                 Logger.Log("Manual Migrations are not enabled, can not apply any migrations.");
                 return;
             }
+
+            var repoInfo = TypeHandler.FindSingleRepo(criteria.ProjectPath, criteria.RepoName);
+            //if null we need to drop out.
+            if (repoInfo == null) return;
+
+            AssertRepoHasEmptyConstructor(repoInfo.RepoType);
             
             var runner = new MigrationRunner();
             runner.ApplyMigrations(criteria);
