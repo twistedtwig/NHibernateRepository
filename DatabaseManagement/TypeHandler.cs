@@ -54,7 +54,11 @@ namespace DatabaseManagement
         /// <returns></returns>
         internal static RepoSearchResult FindSingleRepo(string projectPath, string optionalRepoName)
         {
+            Logger.Log(string.Format("Starting to find single Repo: '{0}, {1}", optionalRepoName, projectPath), isDebugMessage: true);
+
             var loadedProject = new ProjectEvalutionHelper().LoadEvalutionProject(projectPath);
+
+            Logger.Log("LoadedProject: " + loadedProject.FullName, isDebugMessage: true);
 
             var repoTypes = loadedProject
                 .GetTypes()

@@ -1,5 +1,9 @@
 add check before any action runs to ensure empty constructor exists for repo.
 
+
+want to stop nuget adding references to project for all DLL's and exe in the nuget package.  only needs NHibernateRepo
+
+
 try and get one base IRepo class - or update docs to reflect this change
 
 

@@ -50,8 +50,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Build.Utilities.v4.0" />
+    <Reference Include="Microsoft.Build.Framework">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Build.Utilities.v4.0">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -112,4 +116,9 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+<!--  <Target Name="AfterResolveReferences">-->
+<!--    <ResolveAssemblyReference AssemblyFiles="@(_ResolvedProjectReferencePaths)" SearchPaths="$(AssemblySearchPaths)">-->
+<!--      <Output TaskParameter="ResolvedDependencyFiles" ItemName="ReferencePath" />-->
+<!--    </ResolveAssemblyReference>-->
+<!--  </Target>-->
 </Project>
