@@ -66,6 +66,9 @@ function runExe ($exePath, $argumentString) {
 }
 
 
+function copyExeToProjectFolder ($projectFolder){
+
+}
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
 

@@ -15,6 +15,19 @@ namespace DatabaseManagement
             }
         }
 
+        public static void Log(Exception ex, bool isDebugMessage = false)
+        {
+            if (!isDebugMessage || IsDebugging)
+            {
+                var exception = ex;
+                while (exception != null)
+                {
+                    Console.WriteLine(ex.Message);
+                    exception = exception.InnerException;
+                }
+            }
+        }       
+
         /// <summary>
 		/// Initialize is guaranteed to be called by MSBuild at the start of the build
 		/// before any events are raised.

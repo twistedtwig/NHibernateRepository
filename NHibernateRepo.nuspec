@@ -26,4 +26,8 @@
     <file src="NHMigrate\init.ps1" target="tools"  />    
     <file src="NHMigrate\nhmigrationModule.psm1" target="tools"  />    
   </files> 
+
+    <references>
+        <reference file="NHibernateRepo.dll" />
+    </references>
 </package>

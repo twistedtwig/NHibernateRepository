@@ -65,13 +65,14 @@ namespace DatabaseManagement
             //if it is null something is wrong so drop out.
             if (repoInfo == null) return;
 
+            AssertRepoHasEmptyConstructor(repoInfo.RepoType);
+
+
             bool multipleFound = false;
             var configType = TypeHandler.FindSingleConfiguration(criteria.ProjectPath, repoInfo.RepoType, out multipleFound);
             
             //this should not happen. should only ever have one config per repo type.
             if(multipleFound) return;
-
-            AssertRepoHasEmptyConstructor(configType);
 
             if (configType == null)
             {

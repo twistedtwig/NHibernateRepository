@@ -1,4 +1,5 @@
-﻿using DatabaseManagement.Migrations;
+﻿using System.Reflection;
+using DatabaseManagement.Migrations;
 using DatabaseManagement.ProjectHelpers;
 using NHibernateRepo.Configuration;
 using NHibernateRepo.Migrations;
@@ -60,13 +61,31 @@ namespace DatabaseManagement
 
             Logger.Log("LoadedProject: " + loadedProject.FullName, isDebugMessage: true);
 
-            var repoTypes = loadedProject
-                .GetTypes()
-                .Where(t =>
-                    t.IsSubclassOf(typeof(BaseRepo))
-                    && !t.IsGenericType
-                )
-                .ToArray();
+            var repoTypes = new Type[0];
+            try
+            {
+                 repoTypes = loadedProject
+                        .GetTypes()
+                        .Where(t =>
+                            t.IsSubclassOf(typeof(BaseRepo))
+                            && !t.IsGenericType
+                        )
+                        .ToArray();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                Logger.Log("Error whilst getting all classes that inherit from baserepo within loadedproject");
+
+                Exception[] loaderExceptions = ex.LoaderExceptions;
+                Logger.Log("Logger exceptions:", isDebugMessage: true);
+                foreach (var exception in loaderExceptions)
+                {
+                    Logger.Log(exception, isDebugMessage: true);
+                }
+                
+                Logger.Log(ex, isDebugMessage: true);
+                throw;
+            }
 
             if (!string.IsNullOrWhiteSpace(optionalRepoName))
             {
