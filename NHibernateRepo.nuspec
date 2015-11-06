@@ -20,6 +20,11 @@
         <reference file="NHibernateRepo.dll" />
     </references>
 
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="microsoft.Build.Framework" targetFramework="net40" />
+      <frameworkAssembly assemblyName="microsoft.Build.Utilities.V4.0" targetFramework="net40" />
+    </frameworkAssemblies>
+    
   </metadata>
  <files>
     <file src="NHibernateRepo\bin\Release\NHibernateRepo.dll" target="lib\net45" />
