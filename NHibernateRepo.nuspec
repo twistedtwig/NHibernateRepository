@@ -16,6 +16,10 @@
 		<dependency id="FluentNHibernate" />
 	</dependencies>
 
+    <references>
+        <reference file="NHibernateRepo.dll" />
+    </references>
+
   </metadata>
  <files>
     <file src="NHibernateRepo\bin\Release\NHibernateRepo.dll" target="lib\net45" />
@@ -27,7 +31,4 @@
     <file src="NHMigrate\nhmigrationModule.psm1" target="tools"  />    
   </files> 
 
-    <references>
-        <reference file="NHibernateRepo.dll" />
-    </references>
 </package>
