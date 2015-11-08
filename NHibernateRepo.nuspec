@@ -29,6 +29,9 @@
     <file src="NHMigrate\bin\Release\DatabaseManagement.dll" target="lib\net45"  />       
     <file src="NHMigrate\bin\Release\DatabaseManagement.pdb" target="lib\net45"  />       
 
+    <file src="NHMigrate\bin\Release\NHibernateMigrationRepo.dll" target="lib\net45"  />       
+    <file src="NHMigrate\bin\Release\NHibernateMigrationRepo.pdb" target="lib\net45"  />       
+
     <file src="NHMigrate\bin\Release\Microsoft.Build.Framework.dll" target="lib\net45"  />       
     <file src="NHMigrate\bin\Release\Microsoft.Build.Utilities.v4.0.dll" target="lib\net45"  />       
 
