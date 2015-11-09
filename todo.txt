@@ -1,11 +1,8 @@
 need to copy migrate and dll's to bin folder.
 
+create powershell script to add migration
 
-want to stop nuget adding references to project for all DLL's and exe in the nuget package.  only needs NHibernateRepo
-
-
-
-
+create powershell script to apply migration
 
 
 try and get one base IRepo class - or update docs to reflect this change

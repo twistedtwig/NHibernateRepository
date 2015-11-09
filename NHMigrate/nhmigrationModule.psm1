@@ -29,7 +29,9 @@ function FindStartUpProject {
 
 
 function SetupMigrateEXEPath {
-	$path = [System.IO.Path]::GetFullPath((join-path (Split-Path -parent $PSCommandPath) "..\lib\net45\NHMigrate.exe"))
+	$repoBinFolderPath = GetRepoBinFolderBinPath
+	[io.path]::combine($repoBinFolderPath, 'NHMigrate.exe')
+
 	"""$path"""
 	return 
 }
@@ -66,7 +68,43 @@ function runExe ($exePath, $argumentString) {
 }
 
 
-function copyExeToProjectFolder ($projectFolder){
+function GetNugetPackageNetFolder {
+
+	$currentLoc = Get-Location
+	$loc = $currentLoc.Path
+	
+	$packagesFolder = Get-ChildItem $loc -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "packages"}
+	$nhmigrateFolder = Get-ChildItem $packagesFolder -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -like "NHibernateRepo.*"}
+	$packageFolder = $nhmigrateFolder[0].FullName
+	$netPackageFolder = [io.path]::combine($packageFolder, 'lib\net45')
+	$netPackageFolder
+}
+
+function GetRepoBinFolderBinPath {
+	$configStr = $dte.solution.properties.Item("ActiveConfig").value
+	$config = $configStr.subString(0, $configStr.LastIndexOf("|"))
+
+	$nugetPackageFolder = GetNugetPackageNetFolder
+
+	$project = Get-Project
+	$currentProjectPath = $project.FullName
+	$currentProjectFolderPath = $currentProjectPath.subString(0, $currentProjectPath.LastIndexOf("\"))
+
+	$outputPath = [io.path]::combine($currentProjectFolderPath, 'bin', $config)
+	$outputPath
+}
+
+
+function copyExeToProjectFolder {
+	$filesToCopy = "DatabaseManagement.dll", "DatabaseManagement.pdb", "Microsoft.Build.Framework.dll", "Microsoft.Build.Utilities.v4.0.dll", "NHMigrate.exe", "NHMigrate.pdb"
+
+	$numgetFolder = GetNugetPackageNetFolder
+	$repoBinPath = GetRepoBinFolderBinPath
+
+	for ($i=0; $i -lt $filesToCopy.length; $i++) {
+		$sourcePath = [io.path]::combine($numgetFolder, $filesToCopy[$i])
+		Copy-Item $sourcePath repoBinPath		
+	}
 
 }
 
@@ -75,6 +113,8 @@ function copyExeToProjectFolder ($projectFolder){
 
 function Enable-NHMigrations ($args) {
 	write-host("Commencing Enable-Migrations")
+
+	copyExeToProjectFolder
 	
 	$exePath = SetupMigrateEXEPath
 

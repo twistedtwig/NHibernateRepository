@@ -94,6 +94,8 @@ clear
 
 
 
+
+
 function CopyMigrationToBin {
 	$sp = FindStartUpProject
 	$p = $sp.FullName
@@ -108,7 +110,7 @@ function CopyMigrationToBin {
 	$loc = $currentLoc.Path
 
 	$packagesFolder = Get-ChildItem $loc -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "packages"}
-	$nhmigrateFolder = Get-ChildItem $packagesFolder -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -like "VSSDK.Shell.Interop.*"}
+	$nhmigrateFolder = Get-ChildItem $packagesFolder -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -like "NHibernateRepo.*"}
 	#$nhmigrateFolder = Get-ChildItem $packagesFolder -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -like "NHMigrate.*"}
 	
 	if($nhmigrateFolder.length -ge 1){
@@ -136,9 +138,47 @@ function CopyMigrationToBin {
 
 
 
-import-module E:\Work\nhibernateRepo\NHibernateRepository\NHMigrate\nhmigrationModule.psm1
-enable-nhmigrations -repo exampleRepo -debug
-remove-module nhmigrationModule
+#import-module E:\Work\nhibernateRepo\NHibernateRepository\NHMigrate\nhmigrationModule.psm1
+#enable-nhmigrations -repo exampleRepo -debug
+#remove-module nhmigrationModule
 
 
+function GetNugetPackageNetFolder {
 
+	$currentLoc = Get-Location
+	$loc = $currentLoc.Path
+
+	$packagesFolder = Get-ChildItem $loc -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -match "packages"}
+	$nhmigrateFolder = Get-ChildItem $packagesFolder -recurse | Where-Object {$_.PSIsContainer -eq $true -and $_.Name -like "VSSDK.Shell.Interop.*"}
+	$packageFolder = $nhmigrateFolder[0].FullName
+	$netPackageFolder = [io.path]::combine($packageFolder, 'lib\net45')
+	$netPackageFolder
+}
+
+function GetRepoBinFolderBinPath {
+	$configStr = $dte.solution.properties.Item("ActiveConfig").value
+	$config = $configStr.subString(0, $configStr.LastIndexOf("|"))
+
+	$nugetPackageFolder = GetNugetPackageNetFolder
+
+	$project = Get-Project
+	$currentProjectPath = $project.FullName
+	$currentProjectFolderPath = $currentProjectPath.subString(0, $currentProjectPath.LastIndexOf("\"))
+
+	$outputPath = [io.path]::combine($currentProjectFolderPath, 'bin', $config)
+	$outputPath
+}
+
+$filesToCopy = "DatabaseManagement.dll", "DatabaseManagement.pdb", "Microsoft.Build.Framework.dll", "Microsoft.Build.Utilities.v4.0.dll", "NHMigrate.exe", "NHMigrate.pdb"
+
+$x = GetNugetPackageNetFolder
+$x
+
+$y = GetRepoBinFolderBinPath
+$y
+
+for ($i=0; $i -lt $filesToCopy.length; $i++) {
+	$sourcePath = [io.path]::combine($x, $filesToCopy[$i])
+	Copy-Item $sourcePath $y
+	$filesToCopy[$i]
+}
