@@ -1,4 +1,4 @@
-
+$debug = $false
 
 function FindConfigFile ($project){
 	ForEach ($item in $project.ProjectItems | Where { $_.Name -eq "App.config"  -or $_.Name -eq "Web.config"}) 
@@ -82,6 +82,8 @@ function GetNugetPackageNetFolder {
 
 function GetRepoBinFolderBinPath {
 	$configStr = $dte.solution.properties.Item("ActiveConfig").value
+	LogMessage "configStr $configStr"
+
 	$config = $configStr.subString(0, $configStr.LastIndexOf("|"))
 
 	$nugetPackageFolder = GetNugetPackageNetFolder
@@ -105,7 +107,19 @@ function copyExeToProjectFolder {
 		$sourcePath = [io.path]::combine($numgetFolder, $filesToCopy[$i])
 		Copy-Item $sourcePath repoBinPath		
 	}
+}
 
+function SetupDebug ($args){
+	if($args.Contains("-debug"){
+		$debug = $true
+		write-host("Debug enabled extra logging enabled")
+	}
+}
+
+function LogMessage ($message) {
+	if($debug) {
+		write-host $message
+	}
 }
 
 #### #### #### #### #### #### #### #### #### #### #### #### #### #### 
@@ -113,6 +127,7 @@ function copyExeToProjectFolder {
 
 function Enable-NHMigrations ($args) {
 	write-host("Commencing Enable-Migrations")
+	SetupDebug $args
 
 	copyExeToProjectFolder
 	
