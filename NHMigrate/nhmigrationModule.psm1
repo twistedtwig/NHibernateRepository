@@ -30,7 +30,10 @@ function FindStartUpProject {
 
 function SetupMigrateEXEPath {
 	$repoBinFolderPath = GetRepoBinFolderBinPath
-	[io.path]::combine($repoBinFolderPath, 'NHMigrate.exe')
+	LogMessage "SetupMigrateEXEPath => repo bin folder: $repoBinFolderPath"
+
+	$path = [io.path]::combine($repoBinFolderPath, 'NHMigrate.exe')
+	LogMessage "SetupMigrateEXEPath => path: $path"
 
 	"""$path"""
 	return 
@@ -82,11 +85,13 @@ function GetNugetPackageNetFolder {
 
 function GetRepoBinFolderBinPath {
 	$configStr = $dte.solution.properties.Item("ActiveConfig").value
-	LogMessage "configStr $configStr"
+	LogMessage "GetRepoBinFolderBinPath => configStr $configStr"
 
 	$config = $configStr.subString(0, $configStr.LastIndexOf("|"))
+	LogMessage "GetRepoBinFolderBinPath => config $config"
 
 	$nugetPackageFolder = GetNugetPackageNetFolder
+	LogMessage "GetRepoBinFolderBinPath => nuget package: $nugetPackageFolder"
 
 	$project = Get-Project
 	$currentProjectPath = $project.FullName
@@ -100,25 +105,30 @@ function GetRepoBinFolderBinPath {
 function copyExeToProjectFolder {
 	$filesToCopy = "DatabaseManagement.dll", "DatabaseManagement.pdb", "Microsoft.Build.Framework.dll", "Microsoft.Build.Utilities.v4.0.dll", "NHMigrate.exe", "NHMigrate.pdb"
 
-	$numgetFolder = GetNugetPackageNetFolder
+	$nugetFolder = GetNugetPackageNetFolder
+	LogMessage "copyExeToProjectFolder => nuget folder $nugetFolder"
+
 	$repoBinPath = GetRepoBinFolderBinPath
+	LogMessage "copyExeToProjectFolder => repo bin path: $repoBinPath"
 
 	for ($i=0; $i -lt $filesToCopy.length; $i++) {
-		$sourcePath = [io.path]::combine($numgetFolder, $filesToCopy[$i])
-		Copy-Item $sourcePath repoBinPath		
+		$sourcePath = [io.path]::combine($nugetFolder, $filesToCopy[$i])
+		LogMessage "copyExeToProjectFolder => copying file $sourcePath to $repoBinPath"
+
+		Copy-Item $sourcePath $repoBinPath		
 	}
 }
 
-function SetupDebug ($args){
-	if($args.Contains("-debug")){
-		$debug = $true
+function SetupDebug ($params) {
+	if($params.Contains("-debug")){
+		$global:debug = $true
 		write-host("Debug enabled extra logging enabled")
 	}
 }
 
-function LogMessage ($message) {
-	if($debug) {
-		write-host $message
+function LogMessage ($message) {	
+	if($global:debug -eq $true) {
+		write-host("$message")
 	}
 }
 
@@ -132,15 +142,23 @@ function Enable-NHMigrations ($args) {
 	copyExeToProjectFolder
 	
 	$exePath = SetupMigrateEXEPath
+	LogMessage "Enable-NHMigrations => exePath: $exePath"
 
 	$project = Get-Project
+	LogMessage "Enable-NHMigrations => project: $project"
+
 	$projPath = $project.fullName
+	LogMessage "Enable-NHMigrations => project path: $projPath"
 	$otherArgs = ProcessCommandLineArgs $args
+	LogMessage "Enable-NHMigrations => other args: $otherArgs"
 
 	$startupProject = FindStartUpProject
+	LogMessage "Enable-NHMigrations => startup project: $startupProject"
 	$startupConfigPath = FindConfigFile $startupProject
+	LogMessage "Enable-NHMigrations => startup config path: $startupConfigPath"
 
 	$argString = "Enable-Migrations " + """$projPath""" + " " + $otherArgs + " -configFile " + $startupConfigPath
+	LogMessage "Enable-NHMigrations => arg string: $argString"
 	
 	runExe $exePath $argString
 
