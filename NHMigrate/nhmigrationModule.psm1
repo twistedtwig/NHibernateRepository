@@ -110,7 +110,7 @@ function copyExeToProjectFolder {
 }
 
 function SetupDebug ($args){
-	if($args.Contains("-debug"){
+	if($args.Contains("-debug")){
 		$debug = $true
 		write-host("Debug enabled extra logging enabled")
 	}
