@@ -63,7 +63,7 @@ namespace NHMigrate
             var criteria = new CreationCriteria
             {
                 ProjectFileLocation = criteriaParmas.ProjectPath,
-                FileName =criteriaParmas.MigrationName,
+                FileName = criteriaParmas.MigrationName,
                 RepoName = criteriaParmas.OptionalRepoName,
                 ConfigFilePath = criteriaParmas.ConfigFilePath,
             };

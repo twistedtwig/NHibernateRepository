@@ -1,4 +1,5 @@
 $debug = $false
+$global:filesToCopy = "DatabaseManagement.dll", "DatabaseManagement.pdb", "Microsoft.Build.Framework.dll", "Microsoft.Build.Utilities.v4.0.dll", "NHMigrate.exe", "NHMigrate.pdb"
 
 function FindConfigFile ($project){
 	ForEach ($item in $project.ProjectItems | Where { $_.Name -eq "App.config"  -or $_.Name -eq "Web.config"}) 
@@ -103,19 +104,31 @@ function GetRepoBinFolderBinPath {
 
 
 function copyExeToProjectFolder {
-	$filesToCopy = "DatabaseManagement.dll", "DatabaseManagement.pdb", "Microsoft.Build.Framework.dll", "Microsoft.Build.Utilities.v4.0.dll", "NHMigrate.exe", "NHMigrate.pdb"
-
+	
 	$nugetFolder = GetNugetPackageNetFolder
 	LogMessage "copyExeToProjectFolder => nuget folder $nugetFolder"
 
 	$repoBinPath = GetRepoBinFolderBinPath
 	LogMessage "copyExeToProjectFolder => repo bin path: $repoBinPath"
 
-	for ($i=0; $i -lt $filesToCopy.length; $i++) {
-		$sourcePath = [io.path]::combine($nugetFolder, $filesToCopy[$i])
+	for ($i=0; $i -lt $global:filesToCopy.length; $i++) {
+		$sourcePath = [io.path]::combine($nugetFolder, $global:filesToCopy[$i])
 		LogMessage "copyExeToProjectFolder => copying file $sourcePath to $repoBinPath"
 
 		Copy-Item $sourcePath $repoBinPath		
+	}
+}
+
+function deleteExeFromProjectFolder {
+
+	$repoBinPath = GetRepoBinFolderBinPath
+	LogMessage "deleteExeFromProjectFolder => repo bin path: $repoBinPath"
+
+	for ($i=0; $i -lt $global:filesToCopy.length; $i++) {
+		$filePath = [io.path]::combine($repoBinPath, $global:filesToCopy[$i])
+		LogMessage "copyExeToProjectFolder => deleting $global:filesToCopy[$i] from $repoBinPath"
+
+		Remove-Item $filePath
 	}
 }
 
@@ -162,12 +175,39 @@ function Enable-NHMigrations ($args) {
 	
 	runExe $exePath $argString
 
-	
+	deleteExeFromProjectFolder
 }
 
 
 function Add-NHMigration {
 	write-host("Commencing Add-Migration")
+
+	SetupDebug $args
+
+	copyExeToProjectFolder
+	
+	$exePath = SetupMigrateEXEPath
+	LogMessage "Add-NHMigration => exePath: $exePath"
+
+	$project = Get-Project
+	LogMessage "Add-NHMigration => project: $project"
+
+	$projPath = $project.fullName
+	LogMessage "Add-NHMigration => project path: $projPath"
+	$otherArgs = ProcessCommandLineArgs $args
+	LogMessage "Add-NHMigration => other args: $otherArgs"
+
+	$startupProject = FindStartUpProject
+	LogMessage "Add-NHMigration => startup project: $startupProject"
+	$startupConfigPath = FindConfigFile $startupProject
+	LogMessage "Add-NHMigration => startup config path: $startupConfigPath"
+
+	$argString = "Add-Migration " + """$projPath""" + " " + $otherArgs + " -configFile " + $startupConfigPath
+	LogMessage "Add-NHMigration => arg string: $argString"
+	
+	runExe $exePath $argString
+
+	deleteExeFromProjectFolder
 }
 
 function Update-NHMigrations {
