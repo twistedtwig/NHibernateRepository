@@ -67,8 +67,10 @@ function runExe ($exePath, $argumentString) {
 	$process.WaitForExit() 
 	
 	Write-Host "$output"
-	Write-Host "ERRORS: $stderr"
-	Write-Host "exit code: " + $process.ExitCode
+	if(![string]::IsNullOrEmpty($stderr)){
+		LogMessage "ERRORS: $stderr"
+	}
+	LogMessage "exit code: " + $process.ExitCode
 }
 
 

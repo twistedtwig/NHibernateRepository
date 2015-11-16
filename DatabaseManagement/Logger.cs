@@ -116,6 +116,8 @@ namespace DatabaseManagement
 		/// </summary>
 		private void WriteLine(string line, BuildEventArgs e)
 		{
+            if(!IsDebugging) return;
+
 			for (int i = indent; i > 0; i--)
 			{
 				Console.Write("\t");
