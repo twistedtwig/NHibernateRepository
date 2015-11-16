@@ -1,5 +1,3 @@
-update help and info to ensure it says -filename for the add migration
-
 
 create powershell script to apply migration
 

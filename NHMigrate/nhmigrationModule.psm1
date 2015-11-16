@@ -210,8 +210,35 @@ function Add-NHMigration {
 	deleteExeFromProjectFolder
 }
 
-function Update-NHMigrations {
-	write-host("Commencing update-Migrations")
+function Update-NHDatabase {
+	write-host("Commencing Update-Migration")
+
+	SetupDebug $args
+
+	copyExeToProjectFolder
+	
+	$exePath = SetupMigrateEXEPath
+	LogMessage "Update-NHMigration => exePath: $exePath"
+
+	$project = Get-Project
+	LogMessage "Update-NHMigration => project: $project"
+
+	$projPath = $project.fullName
+	LogMessage "Update-NHMigration => project path: $projPath"
+	$otherArgs = ProcessCommandLineArgs $args
+	LogMessage "Update-NHMigration => other args: $otherArgs"
+
+	$startupProject = FindStartUpProject
+	LogMessage "Update-NHMigration => startup project: $startupProject"
+	$startupConfigPath = FindConfigFile $startupProject
+	LogMessage "Update-NHMigration => startup config path: $startupConfigPath"
+
+	$argString = "UPDATE-DATABASE " + """$projPath""" + " " + $otherArgs + " -configFile " + $startupConfigPath
+	LogMessage "Update-NHMigration => arg string: $argString"
+	
+	runExe $exePath $argString
+
+	deleteExeFromProjectFolder
 }
 
 
