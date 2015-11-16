@@ -1,3 +1,5 @@
+update help and info to ensure it says -filename for the add migration
+
 
 create powershell script to apply migration
 
@@ -5,9 +7,8 @@ create powershell script to apply migration
 try and get one base IRepo class - or update docs to reflect this change
 
 
-need to get the powershell script to copy nhmigrate (the exe) to the repo folder before it runs, then clean up afterwards. (this is so NH can find the DLLs)
+on enable migration test if DB exists, if not try and create it. 
 
-test from powershell
 
 -----------------
 EXE runner examples:
@@ -19,15 +20,11 @@ update-database "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\Ex
 -----------------
 
 
-nuget package to include nhmigrate and powershell scripts
-
 
 
 
 Error checking and nice message to user that if they try and add a migration before a config is added they know why it failed.
 
-
-make nhmigrate embed all the DLL's it uses => http://stackoverflow.com/questions/189549/embedding-dlls-in-a-compiled-executable
 
 clean up and write explaination of test area, example project.
 
@@ -38,21 +35,9 @@ update readme to include auto mapper settings info
 update readme to explain that the project you point at for the model TEntity will find all classes and try and map them to the db, will only exlude some class types.
 
 
-commit
 
 
-create powershell script to call exe with params
-
-commit
-
-figure out how to get powershell to be first class citizen of PMC
-
-
-
-do powershell stuff
-
-
-ensure that paths can be relative, dont have to fully path.
+ensure that paths in powershell can be relative, dont have to fully path.
 
 make a migration completely transactional.  all executesql commands in one transaction.. probably do not use nhibernate at all at that point.
 

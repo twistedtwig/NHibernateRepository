@@ -142,6 +142,12 @@ namespace NHMigrate
                 projectPath = args[1];
             }
 
+            //default the 3rd arg to be the migration file name.
+            if (args.Length >= 3)
+            {
+                migrationName = args[2];
+            }
+
             if (args.Contains("-debug"))
             {
                 Logger.IsDebugging = true;
