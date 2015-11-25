@@ -3,6 +3,7 @@ using DatabaseManagement.EnvDte;
 using DatabaseManagement.Migrations;
 using DatabaseManagement.Models;
 using DatabaseManagement.ProjectHelpers;
+using DatabaseManagement.SqlDb;
 using FluentNHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using NHibernateMigrationRepo;
@@ -60,13 +61,19 @@ namespace DatabaseManagement
         public void EnableMigrations(EnableMigrationsCriteria criteria)
         {
             MessageFilter.Register();
-            
+
             var repoInfo = TypeHandler.FindSingleRepo(criteria.ProjectPath, criteria.RepoName);
             //if it is null something is wrong so drop out.
             if (repoInfo == null) return;
 
             AssertRepoHasEmptyConstructor(repoInfo.RepoType);
+            CreateMigrationDatabase(criteria.ProjectPath, repoInfo.RepoType, criteria.ConfigFilePath);
 
+            var repoBase = TypeHandler.CreateRepoBase(repoInfo.Assembly.Location, repoInfo.RepoType);
+
+            //create migration log table, if it doesn't exist.
+            var updater = CreateSchemaUpdater(criteria.ProjectPath, typeof(MigrationRepo), criteria.ConfigFilePath, repoBase.ConnectionStringOrName);
+            updater.Execute(false, true);
 
             bool multipleFound = false;
             var configType = TypeHandler.FindSingleConfiguration(criteria.ProjectPath, repoInfo.RepoType, out multipleFound);
@@ -84,13 +91,7 @@ namespace DatabaseManagement
             {
                 Logger.Log("System is already configured for migrations, see class: " + configType.Name);
             }
-
-            var repoBase = TypeHandler.CreateRepoBase(repoInfo.Assembly.Location, repoInfo.RepoType);
             
-            //create migration log table, if it doesn't exist.
-            var updater = CreateSchemaUpdater(criteria.ProjectPath, typeof(MigrationRepo), criteria.ConfigFilePath, repoBase.ConnectionStringOrName);
-            updater.Execute(false, true);
-
             //clean up
             ProjectEvalutionHelper.FinishedWithProject(criteria.ProjectPath);
             MessageFilter.Revoke();
@@ -126,6 +127,7 @@ namespace DatabaseManagement
             if (repoInfo == null) return;
 
             AssertRepoHasEmptyConstructor(repoInfo.RepoType);
+            EnsureDbAndMigrationTableExists(criteria.ProjectFilePath, repoInfo.RepoType, criteria.ConfigFilePath);
 
             var updater = CreateSchemaUpdater(repoInfo.Assembly.Location, repoInfo.RepoType, criteria.ConfigFilePath);    
             updater.Execute(false, true);
@@ -170,7 +172,8 @@ namespace DatabaseManagement
             }
             
             AssertRepoHasEmptyConstructor(repoInfo.RepoType);
-
+            EnsureDbAndMigrationTableExists(criteria.ProjectFileLocation, repoInfo.RepoType, criteria.ConfigFilePath);
+            
             //ensure that we have the case correct.
             criteria.RepoName = repoInfo.RepoType.Name;
 
@@ -223,6 +226,7 @@ namespace DatabaseManagement
             if (repoInfo == null) return;
 
             AssertRepoHasEmptyConstructor(repoInfo.RepoType);
+            EnsureDbAndMigrationTableExists(criteria.ProjectPath, repoInfo.RepoType, criteria.ConfigFilePath);
             
             var runner = new MigrationRunner();
             runner.ApplyMigrations(criteria);
@@ -269,6 +273,43 @@ namespace DatabaseManagement
             
             var updater = new SchemaUpdate(config.BuildConfiguration());
             return updater;
+        }
+
+        /// <summary>
+        /// Ensures that the migration database exists.
+        /// </summary>
+        /// <param name="projectdllPath"></param>
+        /// <param name="repoType"></param>
+        /// <param name="configFilePath"></param>
+        /// <param name="args"></param>
+        private void CreateMigrationDatabase(string projectdllPath, Type repoType, string configFilePath, params object[] args)
+        {
+            var repoBase = TypeHandler.CreateRepoBase(projectdllPath, repoType, args);
+            var connectionString = ConnectionStringHandler.FindConnectionString(repoBase, configFilePath);
+
+            var builder = new System.Data.SqlClient.SqlConnectionStringBuilder
+            {
+                ConnectionString = connectionString
+            };
+
+            string databaseName = builder.InitialCatalog;
+            
+            var migrationDbExists = DatabaseChecking.CheckDatabaseExists(connectionString, databaseName);
+            if (!migrationDbExists)
+            {
+                DatabaseCreation.CreateDatabase(connectionString, databaseName);
+            }
+        }
+
+        private void EnsureDbAndMigrationTableExists(string projectdllPath, Type repoType, string configFilePath)
+        {
+            var repoBase = TypeHandler.CreateRepoBase(projectdllPath, repoType);  //this might blow up.. might need "args"
+            var connectionString = ConnectionStringHandler.FindConnectionString(repoBase, configFilePath);
+
+            CreateMigrationDatabase(projectdllPath, repoType, configFilePath);
+            //create migration log table, if it doesn't exist.
+            var updateMigration = CreateSchemaUpdater(projectdllPath, typeof(MigrationRepo), configFilePath, connectionString);
+            updateMigration.Execute(false, true);
         }
         
     }

@@ -122,6 +122,8 @@ Only use when migration type set to manual migrations. Requires one parameter (w
 
 No extra parameters are required except if there are multiple repositories, use the optional "-repo CLASSNAME" flag if required.
 
+N.B. When adding a migrations NHibernate schemaUpdate will not script out datalose, i.e. dropping a table or column.  The way around this is to create the migration file in the normal fashion, then manually creating the sql script in it to do the alterations required.
+
 ###Running NHMigrate.exe directly
 
 The main time that you would want to run it directly is for automated processes, such as deploying an application.  Currently there are two files:

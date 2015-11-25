@@ -1,5 +1,6 @@
-
-create powershell script to apply migration
+when a new database is created and existing migrations exist, it doesn't run.  Think it needs to always check to 
+	1) see if DB exists, or not create it
+	2) see if migration table is created, if not create it.
 
 
 try and get one base IRepo class - or update docs to reflect this change

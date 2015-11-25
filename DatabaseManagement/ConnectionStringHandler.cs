@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Data.SqlClient;
 using System.Reflection;
 using NHibernateRepo.Repos;
 using System.IO;
@@ -9,8 +11,30 @@ namespace DatabaseManagement
 {
     internal class ConnectionStringHandler
     {
+        internal static bool IsValidConnectionThatConnects(string connectionString)
+        {
+            try
+            {
+                using (var conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    return (conn.State == ConnectionState.Open);
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         internal static string FindConnectionString(BaseRepo repo, string configFilePath)
         {
+            //if the repo already has the full connection string test this first.
+            if (IsValidConnectionThatConnects(repo.ConnectionStringOrName))
+            {
+                return repo.ConnectionStringOrName;
+            }
+
             if (!File.Exists(configFilePath)) throw new FileNotFoundException("Could not find configuration file");
 
             var str = File.ReadAllText(configFilePath);

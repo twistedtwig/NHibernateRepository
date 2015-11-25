@@ -220,23 +220,23 @@ function Update-NHDatabase {
 	copyExeToProjectFolder
 	
 	$exePath = SetupMigrateEXEPath
-	LogMessage "Update-NHMigration => exePath: $exePath"
+	LogMessage "Update-NHDatabase => exePath: $exePath"
 
 	$project = Get-Project
-	LogMessage "Update-NHMigration => project: $project"
+	LogMessage "Update-NHDatabase => project: $project"
 
 	$projPath = $project.fullName
-	LogMessage "Update-NHMigration => project path: $projPath"
+	LogMessage "Update-NHDatabase => project path: $projPath"
 	$otherArgs = ProcessCommandLineArgs $args
-	LogMessage "Update-NHMigration => other args: $otherArgs"
+	LogMessage "Update-NHDatabase => other args: $otherArgs"
 
 	$startupProject = FindStartUpProject
-	LogMessage "Update-NHMigration => startup project: $startupProject"
+	LogMessage "Update-NHDatabase => startup project: $startupProject"
 	$startupConfigPath = FindConfigFile $startupProject
-	LogMessage "Update-NHMigration => startup config path: $startupConfigPath"
+	LogMessage "Update-NHDatabase => startup config path: $startupConfigPath"
 
 	$argString = "UPDATE-DATABASE " + """$projPath""" + " " + $otherArgs + " -configFile " + $startupConfigPath
-	LogMessage "Update-NHMigration => arg string: $argString"
+	LogMessage "Update-NHDatabase => arg string: $argString"
 	
 	runExe $exePath $argString
 
