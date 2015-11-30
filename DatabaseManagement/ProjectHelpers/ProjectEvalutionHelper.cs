@@ -1,4 +1,4 @@
-﻿using FluentNHibernate.Conventions.AcceptanceCriteria;
+﻿using DatabaseManagement.Logging;
 using Microsoft.Build.Evaluation;
 using System.IO;
 using System.Linq;
@@ -18,25 +18,25 @@ namespace DatabaseManagement.ProjectHelpers
         /// <returns></returns>
         internal Assembly LoadEvalutionProject(string projectPath)
         {
-            Logger.Log("Loading project file: " + projectPath, isDebugMessage: true);
+            LoggerBase.Log("Loading project file: " + projectPath, isDebugMessage: true);
             var project = GetEvalutionProject(projectPath);
-            Logger.Log("Building project file", isDebugMessage: true);
+            LoggerBase.Log("Building project file", isDebugMessage: true);
 //            project.SetGlobalProperty("Configuration", "Debug");
-            project.Build(new Logger());
+            project.Build(new MsBuildLogger());
 
             var outputPath = project.GetPropertyValue("OutputPath");
-            Logger.Log("Project file outputpath: " + (!string.IsNullOrWhiteSpace(outputPath) ? outputPath : "output path was EMPTY -- this might cause an error"), isDebugMessage: true);
+            LoggerBase.Log("Project file outputpath: " + (!string.IsNullOrWhiteSpace(outputPath) ? outputPath : "output path was EMPTY -- this might cause an error"), isDebugMessage: true);
             
             var name = project.GetPropertyValue("AssemblyName");
-            Logger.Log("Project file assembly name: " + name, isDebugMessage: true);
+            LoggerBase.Log("Project file assembly name: " + name, isDebugMessage: true);
             
             var fullPath = Path.Combine(project.DirectoryPath, outputPath);
             var path = Path.Combine(fullPath, name + ".dll");
-            Logger.Log("Loading DLL: " + path, isDebugMessage: true); 
+            LoggerBase.Log("Loading DLL: " + path, isDebugMessage: true); 
             
             var projectAssembly = Assembly.LoadFile(path);
 
-            Logger.Log("", isDebugMessage: true); 
+            LoggerBase.Log("", isDebugMessage: true); 
             return projectAssembly;
         }
 
@@ -70,7 +70,7 @@ namespace DatabaseManagement.ProjectHelpers
            var project = ProjectCollection.GlobalProjectCollection.LoadedProjects.FirstOrDefault(p => p.ProjectFileLocation.LocationString == projectPath);
            if (project != null)
            {
-               Logger.Log("Project collection already loaded and found: " + projectPath, isDebugMessage: true);
+               LoggerBase.Log("Project collection already loaded and found: " + projectPath, isDebugMessage: true);
                return project;
            }
 

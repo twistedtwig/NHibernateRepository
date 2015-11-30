@@ -10,12 +10,7 @@ namespace DatabaseManagement.SqlDb
             bool result = false;
 
             try
-            {
-                //        if (connectionString.Contains("database="))
-                //        {
-                //            connectionString = 
-                //        }
-
+            {               
                 var tmpConn = new SqlConnection(connectionString);
                 string sqlCreateDBQuery = string.Format("SELECT database_id FROM sys.databases WHERE Name = '{0}'", databaseName);
 

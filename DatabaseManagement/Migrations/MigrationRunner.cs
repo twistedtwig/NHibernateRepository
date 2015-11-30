@@ -1,4 +1,6 @@
-﻿using DatabaseManagement.Models;
+﻿using DatabaseManagement.Logging;
+using DatabaseManagement.Models;
+using DatabaseManagement.SqlDb;
 using NHibernateMigrationRepo;
 using NHibernateRepo.Migrations;
 using System;
@@ -26,7 +28,7 @@ namespace DatabaseManagement.Migrations
 
             if (migrationTypes == null || !migrationTypes.Any())
             {
-                Logger.Log("No migrations to run.");
+                LoggerBase.Log("No migrations to run.");
                 return;
             }
 
@@ -39,7 +41,7 @@ namespace DatabaseManagement.Migrations
                 var migration = Activator.CreateInstance(migrationType) as AbstractBaseMigration;
                 if (migration == null)
                 {
-                    Logger.Log("Error creating migration: " + migrationType.Name);
+                    LoggerBase.Log("Error creating migration: " + migrationType.Name);
                     throw new ApplicationException("Error creating migration: " + migrationType.Name);
                 }
 
@@ -47,7 +49,7 @@ namespace DatabaseManagement.Migrations
                 PropertyInfo baseRepoPropertyInfo = migrationType.GetProperty("BaseRepo", BindingFlags.Instance | BindingFlags.NonPublic);
                 baseRepoPropertyInfo.SetValue(migration, repoBase);
 
-                Logger.Log(string.Format("Executing Migration: {0}", migrationType.Name));
+                LoggerBase.Log(string.Format("Executing Migration: {0}", migrationType.Name));
                 migration.Execute();
                 migrationRepo.LogMigrationRan(migrationType.Name, repoInfo.RepoType.Name);
             }

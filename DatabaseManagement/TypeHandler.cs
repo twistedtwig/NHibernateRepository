@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using DatabaseManagement.Logging;
 using DatabaseManagement.Migrations;
 using DatabaseManagement.ProjectHelpers;
 using NHibernateRepo.Configuration;
@@ -30,14 +31,14 @@ namespace DatabaseManagement
             var repoBase = args == null || !args.Any() ? Activator.CreateInstance(typeofRepo) : Activator.CreateInstance(typeofRepo, args);
             if (repoBase == null)
             {
-                Logger.Log("Couldn't create repo, must have parameterless constructor");
+                LoggerBase.Log("Couldn't create repo, must have parameterless constructor");
                 return null;
             }
 
             var repo = repoBase as BaseRepo;
             if (repo == null)
             {
-                Logger.Log("Repo created does not inherit from BaseRepo");
+                LoggerBase.Log("Repo created does not inherit from BaseRepo");
                 return null;
             }
 
@@ -55,11 +56,11 @@ namespace DatabaseManagement
         /// <returns></returns>
         internal static RepoSearchResult FindSingleRepo(string projectPath, string optionalRepoName)
         {
-            Logger.Log(string.Format("Starting to find single Repo: '{0}, {1}", optionalRepoName, projectPath), isDebugMessage: true);
+            LoggerBase.Log(string.Format("Starting to find single Repo: '{0}, {1}", optionalRepoName, projectPath), isDebugMessage: true);
 
             var loadedProject = new ProjectEvalutionHelper().LoadEvalutionProject(projectPath);
 
-            Logger.Log("LoadedProject: " + loadedProject.FullName, isDebugMessage: true);
+            LoggerBase.Log("LoadedProject: " + loadedProject.FullName, isDebugMessage: true);
 
             var repoTypes = new Type[0];
             try
@@ -74,16 +75,16 @@ namespace DatabaseManagement
             }
             catch (ReflectionTypeLoadException ex)
             {
-                Logger.Log("Error whilst getting all classes that inherit from baserepo within loadedproject");
+                LoggerBase.Log("Error whilst getting all classes that inherit from baserepo within loadedproject");
 
                 Exception[] loaderExceptions = ex.LoaderExceptions;
-                Logger.Log("Logger exceptions:", isDebugMessage: true);
+                LoggerBase.Log("Logger exceptions:", isDebugMessage: true);
                 foreach (var exception in loaderExceptions)
                 {
-                    Logger.Log(exception, isDebugMessage: true);
+                    LoggerBase.Log(exception, isDebugMessage: true);
                 }
                 
-                Logger.Log(ex, isDebugMessage: true);
+                LoggerBase.Log(ex, isDebugMessage: true);
                 throw;
             }
 
@@ -92,13 +93,13 @@ namespace DatabaseManagement
                 var repos = repoTypes.Where(r => r.Name.Equals(optionalRepoName, StringComparison.InvariantCultureIgnoreCase)).ToArray();
                 if (!repos.Any())
                 {
-                    Logger.Log("No repo class found with name: " + optionalRepoName);
+                    LoggerBase.Log("No repo class found with name: " + optionalRepoName);
                     return null;
                 }
 
                 if (repos.Count() > 1)
                 {
-                    Logger.Log("More than one repo with same name found, please ensure repo is uniquely named in repo project.");
+                    LoggerBase.Log("More than one repo with same name found, please ensure repo is uniquely named in repo project.");
                     return null;
                 }
 
@@ -107,13 +108,13 @@ namespace DatabaseManagement
 
             if (!repoTypes.Any())
             {
-                Logger.Log("No repo class found");
+                LoggerBase.Log("No repo class found");
                 return null;
             }
 
             if (repoTypes.Count() > 1)
             {
-                Logger.Log("More than one repo found, please specify which repo to use.");
+                LoggerBase.Log("More than one repo found, please specify which repo to use.");
                 return null;
             }
 

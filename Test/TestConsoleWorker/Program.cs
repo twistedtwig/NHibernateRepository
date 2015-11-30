@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using DatabaseManagement;
+using DatabaseManagement.Logging;
 using DatabaseManagement.Models;
 
 namespace TestConsoleWorker
@@ -18,7 +19,7 @@ namespace TestConsoleWorker
         {
             CopyDllsForDomainLoadingDebug(@"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\bin\debug");
 
-            Logger.IsDebugging = true;
+            LoggerBase.IsDebugging = true;
             var setup = new SchemaSetup();
                                                                     
 //            setup.EnableMigrations(new EnableMigrationsCriteria

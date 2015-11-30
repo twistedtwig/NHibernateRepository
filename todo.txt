@@ -2,6 +2,11 @@ when a new database is created and existing migrations exist, it doesn't run.  T
 	1) see if DB exists, or not create it
 	2) see if migration table is created, if not create it.
 
+	when creating db it for some reason wont create the migration log table at the same time.
+
+
+
+add ability to have details sql / nhibernate logging... both show sql and having a logger.
 
 try and get one base IRepo class - or update docs to reflect this change
 

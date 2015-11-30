@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using DatabaseManagement;
+using DatabaseManagement.Logging;
 using DatabaseManagement.Models;
 
 namespace NHMigrate
@@ -150,7 +151,7 @@ namespace NHMigrate
 
             if (args.Contains("-debug"))
             {
-                Logger.IsDebugging = true;
+                LoggerBase.IsDebugging = true;
             }
 
             if (args.Contains("-repo"))

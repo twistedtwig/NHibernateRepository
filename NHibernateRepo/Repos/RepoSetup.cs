@@ -43,7 +43,7 @@ namespace NHibernateRepo.Repos
 
         internal FluentConfiguration CreateConfiguration()
         {
-            var config = Fluently.Configure()
+            var config = Fluently.Configure()                
                 .Database(CreateDbConfig)
                 .Mappings(m => m.AutoMappings.Add(CreateMappings()));
             
@@ -54,7 +54,8 @@ namespace NHibernateRepo.Repos
         {
             return MsSqlConfiguration
                 .MsSql2012
-                .ConnectionString(_connectionString);
+                .ConnectionString(_connectionString)
+                .ShowSql();
         }
 
         private AutoPersistenceModel CreateMappings()

@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Conventions\IgnoreRepoObjectsConvention.cs" />
+    <Compile Include="Migrations\ExampleRepoConfiguration.cs" />
+    <Compile Include="Migrations\ExampleRepoMigrations\20151125213730_initial_Setup_Models.cs" />
     <Compile Include="Models\BankAccountEntity.cs" />
     <Compile Include="Models\BankEntity.cs" />
     <Compile Include="Models\CustomerEntity.cs" />

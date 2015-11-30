@@ -121,13 +121,15 @@
     <Compile Include="AssemblyLoadingHelper.cs" />
     <Compile Include="Configuration\ConfigurationFileHandler.cs" />
     <Compile Include="Configuration\ConfigurationStatus.cs" />
-    <Compile Include="ConnectionStringHandler.cs" />
+    <Compile Include="Logging\Log4netLogger.cs" />
+    <Compile Include="Logging\MsBuildLogger.cs" />
+    <Compile Include="SqlDb\ConnectionStringHandler.cs" />
     <Compile Include="EnvDte\DteHelper.cs" />
     <Compile Include="EnvDte\LocalDteConstants.cs" />
     <Compile Include="EnvDte\MessageFilter.cs" />
     <Compile Include="EnvDte\ProjKinds.cs" />
     <Compile Include="EnvDte\PushReloadHelper.cs" />
-    <Compile Include="Logger.cs" />
+    <Compile Include="Logging\Logger.cs" />
     <Compile Include="Migrations\RepoSearchResult.cs" />
     <Compile Include="Models\ApplyMigrationCriteria.cs" />
     <Compile Include="Models\AutomaticUpdateCriteria.cs" />

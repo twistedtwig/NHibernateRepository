@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace DatabaseManagement
+namespace DatabaseManagement.SqlDb
 {
     internal class ConnectionStringHandler
     {
@@ -27,10 +27,30 @@ namespace DatabaseManagement
             }
         }
 
+        internal static bool CanConnectToDatabaseServer(string connectionString)
+        {
+            if (IsValidConnectionThatConnects(connectionString))
+            {
+                return true;
+            }
+
+            try
+            {
+                connectionString = RemoveDatabaseNameFromConnectionString(connectionString);
+            }
+            catch(ArgumentException ex)
+            {
+                //if it is not a connection string, i.e. connection string name then ignore this error.
+                return false;                
+            }
+            return IsValidConnectionThatConnects(connectionString);
+        }
+
+
         internal static string FindConnectionString(BaseRepo repo, string configFilePath)
         {
             //if the repo already has the full connection string test this first.
-            if (IsValidConnectionThatConnects(repo.ConnectionStringOrName))
+            if (CanConnectToDatabaseServer(repo.ConnectionStringOrName))
             {
                 return repo.ConnectionStringOrName;
             }
@@ -64,6 +84,27 @@ namespace DatabaseManagement
             const string propName = "ConnectionStringOrName";
             
             t.InvokeMember(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.SetProperty | BindingFlags.Instance, null, repo, new object[] { connectionString });
+        }
+
+        internal static string RemoveDatabaseNameFromConnectionString(string connectionString)
+        {
+            //need to remove the actual database name so that it will not try and login to that individual database, but the whole DB server
+            var builder = new SqlConnectionStringBuilder
+            {
+                ConnectionString = connectionString
+            };
+
+            if (connectionString.ToLower().Contains("database"))
+            {
+                builder.Remove("Database");
+            }
+
+            if (connectionString.ToLower().Contains("initial catalog"))
+            {
+                builder.Remove("initial catalog");
+            }
+
+            return builder.ConnectionString;
         }
     }
 }
