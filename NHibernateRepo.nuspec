@@ -12,7 +12,7 @@
     <projectUrl>https://github.com/twistedtwig/NHibernateRepository</projectUrl>
 
     <dependencies>
-		<dependency id="AutoMapper" />
+		<dependency id="AutoMapper" version="[4.0.4]" />
 		<dependency id="FluentNHibernate" />
 	</dependencies>
 
