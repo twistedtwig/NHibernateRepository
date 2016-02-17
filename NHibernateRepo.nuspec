@@ -16,9 +16,27 @@
 		<dependency id="FluentNHibernate" />
 	</dependencies>
 
+    <references>
+        <reference file="NHibernateRepo.dll" />
+    </references>
+
   </metadata>
  <files>
     <file src="NHibernateRepo\bin\Release\NHibernateRepo.dll" target="lib\net45" />
-    <file src="NHibernateRepo\bin\Release\NHibernateRepo.pdb" target="lib\net45"  />           
+    <file src="NHibernateRepo\bin\Release\NHibernateRepo.pdb" target="lib\net45"  /> 
+    <file src="NHMigrate\bin\Release\NHMigrate.exe" target="lib\net45" />
+    <file src="NHMigrate\bin\Release\NHMigrate.pdb" target="lib\net45" />
+    <file src="NHMigrate\bin\Release\DatabaseManagement.dll" target="lib\net45"  />       
+    <file src="NHMigrate\bin\Release\DatabaseManagement.pdb" target="lib\net45"  />       
+
+    <file src="NHMigrate\bin\Release\NHibernateMigrationRepo.dll" target="lib\net45"  />       
+    <file src="NHMigrate\bin\Release\NHibernateMigrationRepo.pdb" target="lib\net45"  />       
+
+    <file src="NHMigrate\bin\Release\Microsoft.Build.Framework.dll" target="lib\net45"  />       
+    <file src="NHMigrate\bin\Release\Microsoft.Build.Utilities.v4.0.dll" target="lib\net45"  />       
+
+    <file src="NHMigrate\init.ps1" target="tools"  />    
+    <file src="NHMigrate\nhmigrationModule.psm1" target="tools"  />    
   </files> 
+
 </package>

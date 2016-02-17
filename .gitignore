@@ -28,5 +28,7 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 output
 packages*/
-/NHibernateRepo/*.ncrunchproject
-/*.ncrunchsolution
+*.ncrunchproject
+*.ncrunchsolution
+/test.bat
+/del.bat

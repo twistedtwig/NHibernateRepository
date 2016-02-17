@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EFBB0A67-EE0B-4160-9806-3E8D2AB9F2A1}</ProjectGuid>
+    <ProjectGuid>{299F7927-CCA1-46D6-AA96-8F1629CE116F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NHibernateRepo</RootNamespace>
-    <AssemblyName>NHibernateRepo</AssemblyName>
+    <RootNamespace>ExampleRepo</RootNamespace>
+    <AssemblyName>ExampleRepo</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,20 +31,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper">
-      <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
-    </Reference>
     <Reference Include="FluentNHibernate">
-      <HintPath>..\packages\FluentNHibernate.2.0.1.0\lib\net40\FluentNHibernate.dll</HintPath>
+      <HintPath>..\..\packages\FluentNHibernate.2.0.1.0\lib\net40\FluentNHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
-      <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
-      <HintPath>..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
+      <HintPath>..\..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,20 +49,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoMapper\IAutoMapperSettings.cs" />
-    <Compile Include="Configuration\RepoMigrationConfigurationBase.cs" />
-    <Compile Include="Migrations\MigrationInfo.cs" />
-    <Compile Include="Repos\IRepo.cs" />
-    <Compile Include="Migrations\BaseMigration.cs" />
-    <Compile Include="Migrations\MigrationToUse.cs" />
-    <Compile Include="Repos\Repo.cs" />
+    <Compile Include="Conventions\IgnoreRepoObjectsConvention.cs" />
+    <Compile Include="Migrations\ExampleRepoConfiguration.cs" />
+    <Compile Include="Migrations\ExampleRepoMigrations\20151125213730_initial_Setup_Models.cs" />
+    <Compile Include="Models\BankAccountEntity.cs" />
+    <Compile Include="Models\BankEntity.cs" />
+    <Compile Include="Models\CustomerEntity.cs" />
+    <Compile Include="ExampleRepo.cs" />
+    <Compile Include="Overrides\BankAccountOverride.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repos\RepoSetup.cs" />
-    <Compile Include="Repos\RepoTransaction.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\NHibernateRepo\NHibernateRepo.csproj">
+      <Project>{EFBB0A67-EE0B-4160-9806-3E8D2AB9F2A1}</Project>
+      <Name>NHibernateRepo</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

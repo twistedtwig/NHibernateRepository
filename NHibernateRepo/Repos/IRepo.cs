@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace NHibernateRepo
+namespace NHibernateRepo.Repos
 {
-    public interface IRepo<TEntity, TOverride>
+    public interface IRepoCombined<TEntity> : IRepoSplit<TEntity, TEntity> 
+        where TEntity : class
+    {
+        
+    }
+
+
+    public interface IRepoSplit<TEntity, TOverride>
         where TEntity : class
         where TOverride : class
     {

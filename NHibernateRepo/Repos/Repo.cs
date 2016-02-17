@@ -5,42 +5,61 @@ using AutoMapper.QueryableExtensions;
 using NHibernate;
 using NHibernate.Linq;
 
-namespace NHibernateRepo
+namespace NHibernateRepo.Repos
 {
-    public abstract class Repo<TEntity, TOverride>
-        : IRepo<TEntity, TOverride> 
-        where TEntity : class
-        where TOverride : class
+    //Base repo is used so that all instances of the generic repo can be found through reflection without knowing the TEntity and TOverride.
+    public abstract class BaseRepo
     {
-        private readonly string _connectionStringOrName;
-        private readonly ISessionFactory _sessionFactory;
+        public string ConnectionStringOrName { get; protected set; }
+
+        private ISessionFactory _sessionFactory;
+        internal ISessionFactory SessionFactory
+        {
+            get { return _sessionFactory ?? (_sessionFactory = CreateSessionFactory()); }
+        }
 
         private ISession _session;
-
-        protected ISession Session
+        internal ISession Session
         {
             get
             {
                 if (_session == null || !_session.IsOpen)
-                {
-                    _session = _sessionFactory.OpenSession();
+                {                   
+                    _session = SessionFactory.OpenSession();
                 }
 
                 return _session;
             }
         }
 
+        internal abstract ISessionFactory CreateSessionFactory();
+    }
 
-        protected Repo(string connectionStringOrName)
+    public abstract class RepoCombined<TEntity> : RepoSplit<TEntity, TEntity>, IRepoCombined<TEntity> where TEntity : class
+    {
+        protected RepoCombined(string connectionStringOrName) : base(connectionStringOrName)
         {
-            _connectionStringOrName = connectionStringOrName;
-            var repoSetup = new RepoSetup<TEntity, TOverride>(_connectionStringOrName);
-            _sessionFactory = repoSetup.SessionFactory;
+        }
+    }
+
+    public abstract class RepoSplit<TEntity, TOverride> : BaseRepo, IRepoSplit<TEntity, TOverride>        
+        where TEntity : class
+        where TOverride : class
+    {
+
+        protected RepoSplit(string connectionStringOrName)
+        {
+            if (string.IsNullOrWhiteSpace(connectionStringOrName))
+            {
+                throw new ArgumentNullException("connectionStringOrName", "Connection string or name must be provided to Repository Base");
+            }
+
+            ConnectionStringOrName = connectionStringOrName;            
         }
 
         public RepoTransaction<TEntity, TOverride> BeginTransaction()
         {
-            return new RepoTransaction<TEntity, TOverride>(_connectionStringOrName);
+            return new RepoTransaction<TEntity, TOverride>(ConnectionStringOrName);
         }
 
         #region Entity methods
@@ -107,54 +126,22 @@ namespace NHibernateRepo
 
 
         #endregion
-    }
-
-    public class RepoTransaction<TEntity, TOverride> : Repo<TEntity, TOverride>, IRepoTransaction<TEntity, TOverride> , IDisposable
-        where TEntity : class
-        where TOverride : class
-    {
-        private ITransaction _transaction;
 
 
-        internal RepoTransaction(string connectionStringOrName)
-            : base(connectionStringOrName)
+
+        #region Migration Methods
+
+        internal RepoSetup<TEntity, TOverride> CreateRepoSetup(string conString)
         {
-            _transaction = Session.BeginTransaction();
+            return new RepoSetup<TEntity, TOverride>(conString);
         }
 
-        public void Commit()
+        internal override ISessionFactory CreateSessionFactory()
         {
-            if (_transaction != null)
-            {
-                if (_transaction.IsActive)
-                {
-                    _transaction.Commit();
-                }
-            }
+            var repoSetup = CreateRepoSetup(ConnectionStringOrName);
+            return repoSetup.SessionFactory;
         }
 
-        public void Rollback()
-        {
-            if (_transaction != null)
-            {
-                if (_transaction.IsActive)
-                {
-                    _transaction.Rollback();
-                }
-            }
-        }
-
-        public void Dispose()
-        {
-            if (_transaction != null)
-            {
-                if (_transaction.IsActive)
-                {
-                    _transaction.Rollback();
-                }
-
-                _transaction = null;
-            }
-        }
+        #endregion
     }
 }

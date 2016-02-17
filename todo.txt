@@ -1,1 +1,126 @@
-setup db scripts and migration stuff
+when a new database is created and existing migrations exist, it doesn't run.  Think it needs to always check to 
+	1) see if DB exists, or not create it
+	2) see if migration table is created, if not create it.
+
+	when creating db it for some reason wont create the migration log table at the same time.
+
+
+
+add ability to have details sql / nhibernate logging... both show sql and having a logger.
+
+try and get one base IRepo class - or update docs to reflect this change
+
+
+on enable migration test if DB exists, if not try and create it. 
+
+
+-----------------
+EXE runner examples:
+
+enable-migrations "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj" -repo examplerepo -configFile "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\App.config" 
+add-migration "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj" -repo examplerepo -configFile "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\App.config" -filename add_mad_migration
+update-database "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj" -repo examplerepo -confiGfile "E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\App.config" 
+
+-----------------
+
+
+
+
+
+Error checking and nice message to user that if they try and add a migration before a config is added they know why it failed.
+
+
+clean up and write explaination of test area, example project.
+
+update readme to explain repocombined and repo split
+
+update readme to include auto mapper settings info
+
+update readme to explain that the project you point at for the model TEntity will find all classes and try and map them to the db, will only exlude some class types.
+
+
+
+
+ensure that paths in powershell can be relative, dont have to fully path.
+
+make a migration completely transactional.  all executesql commands in one transaction.. probably do not use nhibernate at all at that point.
+
+
+once all working and happy and committed => make another repo that is called naked or something... just exposes ISession, but allows to take advantage of migration stuff.  
+Will need to think about how to do the setup stuff.  If it is all naked then they will need to config things are loaded from.. try and make it use the same setup process if possible.
+
+----
+
+(not in order yet)
+
+figure out when powershell script is run how it knows which project to look in for repo stuff, does it get full file path?
+
+be able to tell the schema creator which project to look in for Irepo implementation
+run all instances of IRepo
+
+when adding a migration should check that all previous migrations have already been run.
+
+
+
+figure out how to run all scripts from IRepo
+
+log when a file has been run
+
+before a file is run check if it has already been executed.
+
+
+Think about how to deal with Users wanting to include / exclude types in the configuration.
+
+
+
+
+
+---------------------------------------------------------------------------------------
+
+
+want to reproduce EF style migrations
+
+add migration
+update database
+
+automatic migrations or manual
+
+
+---------------------------------------------------------------------------------------
+
+getting Repo to deal with migrations:
+ 
+adding powershell scripts to PMC (need to be done via nuget)
+ 
+                http://haacked.com/archive/2011/04/19/writing-a-nuget-package-that-adds-a-command-to-the.aspx/
+                http://stackoverflow.com/questions/27807102/how-to-add-commands-to-visualstudio-console
+                http://blogs.msmvps.com/matthieu/2014/06/02/extend-visual-studio-with-nuget-powershell-commands-basis/
+ 
+powershell script helpers to get powershell to check a certain project for config file stuff:
+ 
+                https://docs.nuget.org/consume/package-manager-console-powershell-reference
+ 
+                getting the selected project in the PMC:
+ 
+                                Get-Project
+                                Gets the specified project. If none is specified, returns the default project.
+ 
+                                Get-Project [[-Name] <string>] [-All]
+                                Returns a reference to the DTE (Development Tools Environment) for the specified project. If none is specified, returns the default project selected in the Package Manager Console.
+ 
+ 
+ http://stackoverflow.com/questions/18544354/how-to-programmatically-include-a-file-in-my-project
+
+ http://stackoverflow.com/questions/18020062/how-to-add-an-existing-item-to-a-project-programmatically
+
+ http://stackoverflow.com/questions/9857504/add-existing-item-in-vs2010-project-programmatically
+
+
+
+
+
+figuring a way to add files and folders to a CSPROJ file from powershell
+ 
+                https://msdn.microsoft.com/en-us/library/ms228772%28VS.80%29.aspx?f=255&MSPPError=-2147217396
+                https://gallery.technet.microsoft.com/scriptcenter/9db8e065-bed4-4944-991f-058639b6de48
+                http://stackoverflow.com/questions/17382308/include-file-in-project-from-command-line
