@@ -63,7 +63,9 @@ There are three basic commands:
 
 - Enable Migrations (Enable-NHMigrations)
 - Add Migration (Add-NHMigration)
-- Update Database (Update-NHMigrations)
+- Update Database (Update-NHDatabase)
+
+To debug any of the commands add the switch "-debug".
 
 Before any command is issued a Repository class that inherits from IRepo needs to be created.  The project that it is created in will become the repository project.
  
@@ -106,7 +108,7 @@ All NHMigrate commands are first class citizens of the PMC and are enabled when 
 
 - Enable-NHMigrations
 - Add-NHMigration
-- Update-NHMigrations
+- Update-NHDatabase
 
 ####Enable-NHMigrations
 
@@ -118,7 +120,7 @@ Only use when migration type set to manual migrations. Requires one parameter (w
 
     Add-NHMigration Added-Customer-Details
 
-####Update-NHMigrations
+####Update-NHDatabase
 
 No extra parameters are required except if there are multiple repositories, use the optional "-repo CLASSNAME" flag if required.
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace NHibernateRepo.Repos
@@ -33,7 +34,7 @@ namespace NHibernateRepo.Repos
         where TEntity : class
         where TOverride : class
     {
-
+        IQueryable<T> Entities<T>();
         void Commit();
         void Rollback();
     }

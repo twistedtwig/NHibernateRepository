@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using NHibernate;
+using NHibernate.Linq;
 
 namespace NHibernateRepo.Repos
 {
@@ -14,6 +16,11 @@ namespace NHibernateRepo.Repos
             : base(connectionStringOrName)
         {
             _transaction = Session.BeginTransaction();
+        }
+
+        public IQueryable<T> Entities<T>()
+        {
+            return Session.Query<T>().AsQueryable();
         }
 
         public void Commit()

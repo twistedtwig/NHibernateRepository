@@ -1,3 +1,5 @@
+cant do help from powershell
+
 when a new database is created and existing migrations exist, it doesn't run.  Think it needs to always check to 
 	1) see if DB exists, or not create it
 	2) see if migration table is created, if not create it.
