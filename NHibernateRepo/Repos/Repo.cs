@@ -101,22 +101,22 @@ namespace NHibernateRepo.Repos
 
         public TP Single<TE, TP>(Expression<Func<TE, bool>> exp)
         {
-            return Session.Query<TE>().Where(exp).Project().To<TP>().Single();
+            return Session.Query<TE>().Where(exp).Project().To<TP>().AsQueryable().Single();
         }
 
         public TP SingleOrDefault<TE, TP>(Expression<Func<TE, bool>> exp)
         {
-            return Session.Query<TE>().Where(exp).Project().To<TP>().SingleOrDefault();
+            return Session.Query<TE>().Where(exp).Project().To<TP>().AsQueryable().SingleOrDefault();
         }
 
         public TP First<TE, TP>(Expression<Func<TE, bool>> exp)
         {
-            return Session.Query<TE>().Where(exp).Project().To<TP>().First();
+            return Session.Query<TE>().Where(exp).Project().To<TP>().AsQueryable().First();
         }
 
         public TP FirstOrDefault<TE, TP>(Expression<Func<TE, bool>> exp)
         {
-            return Session.Query<TE>().Where(exp).Project().To<TP>().FirstOrDefault();
+            return Session.Query<TE>().Where(exp).Project().To<TP>().AsQueryable().FirstOrDefault();
         }
 
         public bool Any<TE>(Expression<Func<TE, bool>> exp)
