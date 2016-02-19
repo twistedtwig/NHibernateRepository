@@ -21,6 +21,7 @@ namespace NHibernateRepo.Repos
 
         void Update<T>(T entity);
         void Create<T>(T entity);
+        void Remove<T>(T entity);
 
         TP[] List<TE, TP>(Expression<Func<TE, bool>> exp);
         TP Single<TE, TP>(Expression<Func<TE, bool>> exp);

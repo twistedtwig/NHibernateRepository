@@ -87,6 +87,13 @@ namespace NHibernateRepo.Repos
             Session.Flush();
         }
 
+        public void Remove<T>(T entity)
+        {
+            if (entity == null) throw new ArgumentNullException("entity", "Cannot create null entity");
+
+            Session.Delete(entity);
+            Session.Flush();
+        }
 
         #endregion
 

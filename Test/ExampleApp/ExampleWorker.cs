@@ -1,13 +1,15 @@
-﻿using ExampleRepo.Models;
-using NHibernate.Util;
+﻿using System.Linq;
+using AutoMapper.QueryableExtensions;
+using ExampleRepo;
+using ExampleRepo.Models;
 
 namespace ExampleApp
 {
     public class ExampleWorker
     {
-        private readonly ExampleRepo.OtherRepo _context;
+        private readonly OtherRepo _context;
 
-        public ExampleWorker(ExampleRepo.OtherRepo repo)
+        public ExampleWorker(OtherRepo repo)
         {
             _context = repo;
         }
@@ -66,6 +68,12 @@ namespace ExampleApp
 //                var bank = repo.Entities<BankEntity>().First();
 //            }
 //
+            //how to get around auto mapper projections / nhibernate child list issue
+            using (var repo = _context.BeginTransaction())
+            {
+                var mappedItem = repo.Entities<BankEntity>().Where(a => a.Name == "Bank Account").ProjectTo<BankView>().ToArray().First();
+            }
+
             var accounts = _context.List<BankEntity, BankView>(a => true);
 
             var firstAccount1 = _context.First<BankEntity, BankView>(a => true);
