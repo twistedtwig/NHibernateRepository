@@ -176,3 +176,16 @@ Updating the database will require:
  - project file path
  - config file path
  - repo name (optional)
+
+
+ ##Issues
+
+ Projections with child lists do not seem to be fully supported in NHibernate:
+
+ - https://nhibernate.jira.com/browse/NH-3043
+ - https://hibernate.atlassian.net/browse/HHH-3356
+
+ When you require this, there are two options:
+
+  - use mappings that do not return child lists and get the child lists seperately.
+  - use the transaction object and Entities method to get it without a projection.

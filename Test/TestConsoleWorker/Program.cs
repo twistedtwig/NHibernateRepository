@@ -17,36 +17,36 @@ namespace TestConsoleWorker
 
         private void Run()
         {
-            CopyDllsForDomainLoadingDebug(@"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\bin\debug");
+            CopyDllsForDomainLoadingDebug(@"D:\Development\NHibernateRepoProject\Test\ExampleRepo\bin\debug");
 
             LoggerBase.IsDebugging = true;
             var setup = new SchemaSetup();
                                                                     
 //            setup.EnableMigrations(new EnableMigrationsCriteria
 //            {
-//                ProjectPath = @"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\examplerepo.csproj",
+//                ProjectPath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\examplerepo.csproj",
 //                RepoName = "examplerepo",
-//                ConfigFilePath = @"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\App.config",                
+//                ConfigFilePath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\App.config",                
 //            });
 
 
 
 //            var criteria = new CreationCriteria
 //            {
-//                ProjectFileLocation = @"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj",
+//                ProjectFileLocation = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\ExampleRepo.csproj",
 //                FileName = "initial_Setup-Models",
 //                RepoName = "examplerepo",
-//                ConfigFilePath = @"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\App.config"
+//                ConfigFilePath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\App.config"
 //            };
 //            setup.CreateScript(criteria);
 
 
 //            var criteria = new CreationCriteria
 //            {
-//                ProjectFileLocation = @"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj",
+//                ProjectFileLocation = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\ExampleRepo.csproj",
 //                FileName = "Age_added",
 //                RepoName = "ExampleRepo",
-//                ConfigFilePath = @"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\App.config"
+//                ConfigFilePath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\App.config"
 //            };
 //            setup.CreateScript(criteria);
 
@@ -54,9 +54,9 @@ namespace TestConsoleWorker
 
                 var crit = new ApplyMigrationCriteria
                 {
-                    ProjectPath = @"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\ExampleRepo.csproj",
+                    ProjectPath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\ExampleRepo.csproj",
                     RepoName = "ExampleRepo",
-                    ConfigFilePath = @"E:\Work\nhibernateRepo\NHibernateRepository\Test\ExampleRepo\App.config"
+                    ConfigFilePath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\App.config"
                 };
             
                 setup.ApplyMigrations(crit);

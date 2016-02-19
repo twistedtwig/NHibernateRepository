@@ -5,12 +5,12 @@ using DatabaseManagement.Migrations;
 using DatabaseManagement.Models;
 using DatabaseManagement.ProjectHelpers;
 using DatabaseManagement.SqlDb;
-using FluentNHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using NHibernateMigrationRepo;
 using NHibernateRepo.Migrations;
 using System;
 using System.Reflection;
+using FluentNHibernate.Cfg;
 
 namespace DatabaseManagement
 {

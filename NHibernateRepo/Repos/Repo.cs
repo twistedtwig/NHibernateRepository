@@ -96,27 +96,30 @@ namespace NHibernateRepo.Repos
 
         public TP[] List<TE, TP>(Expression<Func<TE, bool>> exp)
         {
-            return Session.Query<TE>().Where(exp).Project().To<TP>().AsQueryable().ToArray();
+            return Session.Query<TE>().Where(exp).ProjectTo<TP>().AsQueryable().ToArray();
         }
 
         public TP Single<TE, TP>(Expression<Func<TE, bool>> exp)
         {
-            return Session.Query<TE>().Where(exp).Project().To<TP>().AsQueryable().Single();
+            IQueryable<TE> query = Session.Query<TE>();
+            query = query.Where(exp);
+            return query.ProjectTo<TP>()
+                .AsQueryable().Single();
         }
 
         public TP SingleOrDefault<TE, TP>(Expression<Func<TE, bool>> exp)
         {
-            return Session.Query<TE>().Where(exp).Project().To<TP>().AsQueryable().SingleOrDefault();
+            return Session.Query<TE>().Where(exp).ProjectTo<TP>().AsQueryable().SingleOrDefault();
         }
 
         public TP First<TE, TP>(Expression<Func<TE, bool>> exp)
         {
-            return Session.Query<TE>().Where(exp).Project().To<TP>().AsQueryable().First();
+            return Session.Query<TE>().Where(exp).ProjectTo<TP>().AsQueryable().First();
         }
-
+        
         public TP FirstOrDefault<TE, TP>(Expression<Func<TE, bool>> exp)
         {
-            return Session.Query<TE>().Where(exp).Project().To<TP>().AsQueryable().FirstOrDefault();
+            return Session.Query<TE>().Where(exp).ProjectTo<TP>().AsQueryable().FirstOrDefault();
         }
 
         public bool Any<TE>(Expression<Func<TE, bool>> exp)
