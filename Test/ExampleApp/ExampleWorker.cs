@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using AutoMapper.QueryableExtensions;
 using ExampleRepo;
 using ExampleRepo.Models;
 
@@ -11,7 +10,7 @@ namespace ExampleApp
 
         public ExampleWorker(OtherRepo repo)
         {
-            _context = repo;
+            _context = repo;            
         }
 
         public void SetupMappings()
@@ -71,7 +70,9 @@ namespace ExampleApp
             //how to get around auto mapper projections / nhibernate child list issue
             using (var repo = _context.BeginTransaction())
             {
-                var mappedItem = repo.Entities<BankEntity>().Where(a => a.Name == "Bank Account").ProjectTo<BankView>().ToArray().First();
+                var query = repo.Entities<BankEntity>().Where(a => a.Name == "Bank Account");
+                var bankViews = query.ToArray();
+                var mappedItem = bankViews.First();
             }
 
             var accounts = _context.List<BankEntity, BankView>(a => true);

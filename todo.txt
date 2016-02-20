@@ -1,3 +1,5 @@
+raw repo.. just exposing ISession.
+
 cant do help from powershell
 
 when a new database is created and existing migrations exist, it doesn't run.  Think it needs to always check to 

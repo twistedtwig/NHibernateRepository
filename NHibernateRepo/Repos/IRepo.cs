@@ -1,9 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using NHibernate;
 
 namespace NHibernateRepo.Repos
 {
+    public interface IRawRepo<TEntity, TOverride>
+        where TEntity : class
+        where TOverride : class
+    {
+        ISession Session { get; }
+    }
+
     public interface IRepoCombined<TEntity> : IRepoSplit<TEntity, TEntity> 
         where TEntity : class
     {

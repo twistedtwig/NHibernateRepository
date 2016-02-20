@@ -35,6 +35,36 @@ namespace NHibernateRepo.Repos
         internal abstract ISessionFactory CreateSessionFactory();
     }
 
+
+    public abstract class RawRepo<TEntity, TOverride> : BaseRepo, IRawRepo<TEntity, TOverride>
+        where TEntity : class
+        where TOverride : class
+    {
+        public new ISession Session { get { return base.Session; } }
+
+        protected RawRepo(string connectionStringOrName)
+        {
+            if (string.IsNullOrWhiteSpace(connectionStringOrName))
+            {
+                throw new ArgumentNullException("connectionStringOrName", "Connection string or name must be provided to Repository Base");
+            }
+
+            ConnectionStringOrName = connectionStringOrName;            
+        }
+
+        internal RepoSetup<TEntity, TOverride> CreateRepoSetup(string conString)
+        {
+            return new RepoSetup<TEntity, TOverride>(conString);
+        }
+
+        internal override ISessionFactory CreateSessionFactory()
+        {
+            var repoSetup = CreateRepoSetup(ConnectionStringOrName);
+            return repoSetup.SessionFactory;
+        }
+    }
+
+
     public abstract class RepoCombined<TEntity> : RepoSplit<TEntity, TEntity>, IRepoCombined<TEntity> where TEntity : class
     {
         protected RepoCombined(string connectionStringOrName) : base(connectionStringOrName)

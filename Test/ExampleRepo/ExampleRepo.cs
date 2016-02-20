@@ -27,4 +27,15 @@ namespace ExampleRepo
         {
         }
     }
+
+    public class SessionRepo : RawRepo<BankAccountEntity, BankAccountEntityOverride>
+    {
+        public SessionRepo() : this("connectionString")
+        {
+        }
+
+        public SessionRepo(string connectionStringOrName) : base(connectionStringOrName)
+        {
+        }
+    }
 }

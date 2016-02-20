@@ -3,6 +3,17 @@ Generic NHibernate Repository
 
 The goal of this project is to provide a clean repository layer that tries to return sensible objects from the db entities.  It allows abstraction from a database or ORM and makes testing easier.
 
+There are two types of Repository object.  
+
+ - RawRepo
+ - RepoSplit / RepoCombined
+
+##RawRepo
+The RawRepo basically just exposes the Session object and allows the developer to create and use migrations.
+
+##RepoSplit / RepoCombined 
+The RepoSplit / RepoCombined provide a wrapper around the session object and use AutoMapper projections but still allows the developer to create and use migrations.
+
 The Repo object is an abstract class.  A suggestion is to create a Repository project, inherit from the Repo class, passing the connection string name (or actual connection string) to the abstract base class.  The Entity models can be either in this project or another, As well as database overrides.
 
 ```

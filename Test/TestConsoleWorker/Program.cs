@@ -22,12 +22,12 @@ namespace TestConsoleWorker
             LoggerBase.IsDebugging = true;
             var setup = new SchemaSetup();
                                                                     
-//            setup.EnableMigrations(new EnableMigrationsCriteria
-//            {
-//                ProjectPath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\examplerepo.csproj",
-//                RepoName = "examplerepo",
-//                ConfigFilePath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\App.config",                
-//            });
+            setup.EnableMigrations(new EnableMigrationsCriteria
+            {
+                ProjectPath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\examplerepo.csproj",
+                RepoName = "SessionRepo",
+                ConfigFilePath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\App.config",                
+            });
 
 
 
@@ -52,14 +52,14 @@ namespace TestConsoleWorker
 
 
 
-                var crit = new ApplyMigrationCriteria
-                {
-                    ProjectPath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\ExampleRepo.csproj",
-                    RepoName = "ExampleRepo",
-                    ConfigFilePath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\App.config"
-                };
-            
-                setup.ApplyMigrations(crit);
+//                var crit = new ApplyMigrationCriteria
+//                {
+//                    ProjectPath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\ExampleRepo.csproj",
+//                    RepoName = "ExampleRepo",
+//                    ConfigFilePath = @"D:\Development\NHibernateRepoProject\Test\ExampleRepo\App.config"
+//                };
+//            
+//                setup.ApplyMigrations(crit);
 
 
 
